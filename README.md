@@ -44,5 +44,29 @@
 1. As a user, I want to be able to create a new note, in order to start notetaking.
 1. As a user, I want to be able to add tags to a note, in order to organize notes by them and search notes by them.
 1. As a user, I want to be able to search for notes by tags.
-1. As a user, I want to be able to archive notes that are no longer needed but which I don't want to delete. 
-1. As a user, I want to be able to delete a note, in order to clear out no longer needed ones.
+1. As a user, I want to be able to archive notes that are no longer needed but which I don't want to delete.
+
+----------------
+
+# UBC 2022 T2 CPSC 210 - Personal Project
+
+## About
+
+1. **What will the application do?**
+
+    *The application will be a budget tracker. You can add receipts, and will tell you if you've stayed under your budget (and how much left you have to spend),
+    have met your budget, or are over it (and how much you need to reduce).*
+
+1. **Who will use it?**
+
+    *Me, students, and people on tight budgets.*
+
+1. **Why is this project of interest to you?**
+
+    *Because on a tight budget, must make sure I don't go broke and starve.*
+
+## User Stories
+1. As a user, I want to be able to set my financial goals.
+1. As a user, I want to be able to add a financial transactions.
+1. As a user, I want to be able to remove a financial transactions.
+1. As a user, I want to be able to get feedback on how well I'm doing, and/or advice on what I should do.
