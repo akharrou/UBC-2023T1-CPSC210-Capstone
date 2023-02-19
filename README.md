@@ -17,22 +17,11 @@
 
 ## User Stories
 
-- [ ] As a user, I want to be able to ( add | list | edit | delete ) my financial goals ( to | from | from | from ) my financial goals list
-    - [ ] `account.(add|get|lst|edt|del)FinancialGoal`
-- [ ] As a user, I want to be able to ( add | list | edit | delete ) financial entries ( to | from | from | from ) my financial ledger
-    - [ ] As a user, I want to be able to ( add | list | edit | delete ) assets (expected reoccuring money inflows) ( to | from | from | from ) my account assets list <!-- (e.g. income, scholarship, student loan, financial aid, parent monthly contribution); these will automatically generate and add inflow payments to my financial ledger -->
-        - [ ] `account.(add|get|lst|edt|del)FinancialAsset` <!-- add amount to be added + reoccurrance pattern -->
-    - [ ] As a user, I want to be able to ( add | list | edit | delete ) liabilities (expected reoccuring money outflows) ( to | from | from | from ) my account liabilities list <!-- (e.g. daily, weekly, monthly, quarterly, semi-annual, annual, expenses; rent, wifi plan, cellular plan, amazon prime, netflix); these will automatically generate and add outflow payments to my financial ledger -->
-        - [ ] `account.(add|get|lst|edt|del)FinancialLiability` <!-- add amount to be deducted + reoccurrance pattern -->
-    - [ ] As a user, I want to be able to ( add | list | edit | delete ) one-time inflows <!-- (e.g. friend pays you 5 bucks cause X, you win the lotto) to my financial ledger -->
-        - [ ] `ledger.(add|get|lst|edt|del)FinancialInflow` <!-- for a specified date -->
-    - [ ] As a user, I want to be able to ( add | list | edit | delete ) one-time outflows <!-- (e.g. parking fee, late payment fee, made an unexpected grocery, unexpected doctor’s appointment, paid for car crash damages) to my financial ledger -->
-        - [ ] `ledger.(add|get|lst|edt|del)FinancialOutflow` <!-- for a specified date -->
-- [ ] As a user, I want to be able to simulate and get a financial statement report [for some specified date]
-    - [ ] `account.generateFinancialStatementReport` <!-- generate financial statement for some specified date -->
-        - [ ] `account.simulateFinancialActivityTillDate` <!-- simulate financial activity till specified date -->
-    - [ ] `account.generateFinancialGoalsReport` <!-- given a financial statement report, check and mark which financial goals have been met, and which that haven't -->
-    - [ ] `account.printFinancialStatement` <!-- display financial statement report -->
+- [x] As a user, I want to be able to have, consult, and edit my financial (net cashflow) goal
+- [x] As a user, I want to be able to ( add | list ) financial entries ( to | from | from | from ) my financial ledger
+    - [x] As a user, I want to be able to ( add | list ) one-time inflows <!-- (e.g. friend pays you 5 bucks cause X, you win the lotto) to my financial ledger -->
+    - [x] As a user, I want to be able to ( add | list ) one-time outflows <!-- (e.g. parking fee, late payment fee, made an unexpected grocery, unexpected doctor’s appointment, paid for car crash damages) to my financial ledger -->
+- [x] As a user, I want to be able to get a financial summary report
 
 ## Domain Analysis
 

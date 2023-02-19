@@ -126,7 +126,7 @@ public class FinancialLedger {
                     "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n"
                     + entryRepr))
             + "\n\n"
-            + String.format("%s%41s %d\n", "    ".repeat(ntabs + 1), "Count: " + ".".repeat(41),
+            + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
                 this.getTotalInflowEntries())
             + String.format("%s%40s $%,.2f\n", "    ".repeat(ntabs + 1), "Median: " + ".".repeat(40),
                 this.getMedianInflow())
@@ -138,7 +138,7 @@ public class FinancialLedger {
 
     // EFFECTS: get a string representation of all outflows in ledger
     public String reprOutflows(int ntabs) {
-        return (this.getTotalOutflowEntries() < 1) ? "\n" :
+        return (this.getTotalOutflowEntries() < 1) ? "" :
             String.format("\n%s%s\n", "    ".repeat(ntabs), "Outflows:")
             + this.ledger.stream()
                 .filter(entry -> entry instanceof Outflow)
@@ -147,7 +147,7 @@ public class FinancialLedger {
                     "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n"
                     + entryRepr))
             + "\n\n"
-            + String.format("%s%41s %d\n", "    ".repeat(ntabs + 1), "Count: " + ".".repeat(41),
+            + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
                 this.getTotalOutflowEntries())
             + String.format("%s%40s $%,.2f\n", "    ".repeat(ntabs + 1), "Median: " + ".".repeat(40),
                 this.getMedianOutflow())
