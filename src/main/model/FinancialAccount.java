@@ -1,87 +1,82 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
 // https://www.youtube.com/watch?v=JpoI_rdMgLM
 public class FinancialAccount {
 
-    // private List<FinancialGoal> goals;
-    // private List<FinancialStatement> archive;
-    // private List<LogEntry> log;
-    private String userFirstname;
-    private String userLastname;
-    private FinancialLedger userLedger;
+    private final UUID id;
+    private final String firstname;
+    private final String lastname;
+    private double presentNetCashflow;
+    private double targetNetCashflow;
+    private FinancialLedger ledger;
 
-    private void createAccount() {
-        // "Firstname: "
-        // "Lastname: "
-        // "Budget: "
-        // "Welcome " + userFirstname + " " + userLastname ". You're currently on budget !"
+    public FinancialAccount() {
+        this.id = UUID.randomUUID();
+        this.firstname = "John";
+        this.lastname = "Doe";
+        this.presentNetCashflow = 0.0;
+        this.targetNetCashflow = 0.0;
+        this.ledger = new FinancialLedger();
     }
 
-    private void addFinancialGoal();
-    private void getFinancialGoal();
-    private void lstFinancialGoal();
-    private void edtFinancialGoal();
-    private void delFinancialGoal();
+    public void addTransaction(double amount, String description) {
+        this.ledger.addEntry(amount, description);
+        this.presentNetCashflow = this.ledger.getNetCashflow();
+    }
 
-    private void addFinancialAsset();
-    private void getFinancialAsset();
-    private void lstFinancialAsset();
-    private void edtFinancialAsset();
-    private void delFinancialAsset();
+    // EFFECTS: returns the financial summary of this account.
+    public String getSummary() {
+        String summary = "\n";
 
-    private void addFinancialLiability();
-    private void getFinancialLiability();
-    private void lstFinancialLiability();
-    private void edtFinancialLiability();
-    private void delFinancialLiability();
+        // header
+        summary += "Financial Summary:\n";
+        summary += "\n  Datetime: " + DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
+        summary += "\n  Account-ID: " + this.id;
+        summary += "\n  Owner: " + this.firstname + " " + this.lastname;
+        // body
+        summary += "\n  Ledger:\n" + this.ledger.repr(2);
+        // footer
+        summary += "\n  Total Entries: " + this.ledger.getTotalEntries();
+        summary += "\n  Present Net Cashflow: " + this.ledger.getNetCashflow();
+        summary += "\n  Target Net Cashflow: " + this.targetNetCashflow;
 
-    private void generateFinancialStatementReportForDate();
-    private void simulateFinancialActivityTillDate();
-    private void generateFinancialGoalsReportForDate();
-}
+        if (this.presentNetCashflow > this.targetNetCashflow) {
+            summary += "\n\nCommentary: You're on target.";
+        } else if (this.presentNetCashflow < this.targetNetCashflow) {
+            summary += "\n\nCommentary: You're going broke.";
+        } else {
+            summary += "\n\nCommentary: You're spot on.";
+        }
 
-class FinancialLedger {
+        return summary;
+    }
 
-    private void lstAll();
-    private void delAll();
+    // EFFECTS: returns account's identifier.
+    public UUID getID() {
+        return this.id;
+    }
 
-    private void addFinancialInflow();
-    private void getFinancialInflow();
-    private void lstFinancialInflow();
-    private void edtFinancialInflow();
-    private void delFinancialInflow();
+    // EFFECTS: returns account's owner firstname.
+    public String getFirstname() {
+        return this.firstname;
+    }
 
-    private void addFinancialOutflow();
-    private void getFinancialOutflow();
-    private void lstFinancialOutflow();
-    private void edtFinancialOutflow();
-    private void delFinancialOutflow();
-}
+    // EFFECTS: returns account's owner lastname.
+    public String getLastname() {
+        return this.lastname;
+    }
 
-class FinancialLedgerEntry {
-    // stub
-}
+    // EFFECTS: returns account's present net cashflow.
+    public double getPresentNetCashflow() {
+        return this.presentNetCashflow;
+    }
 
-class FinancialGoal {
-    // stub
-}
-
-class FinancialCashflow {
-    // stub
-}
-
-class FinancialAsset implements FinancialCashflow {
-    // stub
-}
-
-class FinancialLiability implements FinancialCashflow {
-    // stub
-}
-
-class FinancialStatement {
-    // stub
-}
-
-class LogEntry {
-    // stub
+    // EFFECTS: returns account's target net cashflow.
+    public double getTargetNetCashflow() {
+        return this.targetNetCashflow;
+    }
 }

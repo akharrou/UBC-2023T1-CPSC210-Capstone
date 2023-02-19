@@ -1,0 +1,8 @@
+{
+  "search.useIgnoreFiles": true,
+  "files.exclude":
+  {
+    ".draft/": false,
+    ".git/": true,
+  }
+}
