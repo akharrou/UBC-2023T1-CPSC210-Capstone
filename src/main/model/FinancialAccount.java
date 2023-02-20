@@ -4,30 +4,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-// https://www.youtube.com/watch?v=JpoI_rdMgLM
-public class FinancialAccount {
+import org.json.JSONObject;
+
+// Represents the financial account of some user. Holds information about the user,
+//   and crucially a financial ledger of all of a user's financial inflows and outflows.
+public class FinancialAccount
+        implements Writable<JSONObject> {
 
     private final UUID id;
-    private final String creationDatetime;
+    private final String created;
     private final String firstname;
     private final String lastname;
     private double presentNetCashflow;
     private double targetNetCashflow;
     private FinancialLedger ledger;
 
-    public FinancialAccount() {
-        this.id = UUID.randomUUID();
-        this.creationDatetime = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
-        this.firstname = "John";
-        this.lastname = "Doe";
-        this.presentNetCashflow = 0.0;
-        this.targetNetCashflow = 0.0;
-        this.ledger = new FinancialLedger();
-    }
-
+    // EFFECTS: creates a new financial account populated with given input info.
     public FinancialAccount(String first, String last, double targetNetCashflow) {
         this.id = UUID.randomUUID();
-        this.creationDatetime = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
+        this.created = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
         this.firstname = first;
         this.lastname = last;
         this.presentNetCashflow = 0.0;
@@ -35,9 +30,24 @@ public class FinancialAccount {
         this.ledger = new FinancialLedger();
     }
 
-    public void addTransaction(double amount, String description) {
+    // EFFECTS: recreates the financial account represented by the JSON object.
+    public FinancialAccount(JSONObject account) {
+        this.id = UUID.fromString(account.getString("id"));
+        this.created = account.getString("created");
+        this.firstname = account.getString("firstname");
+        this.lastname = account.getString("lastname");
+        this.presentNetCashflow = account.getDouble("presentNetCashflow");
+        this.targetNetCashflow = account.getDouble("targetNetCashflow");
+        this.ledger = new FinancialLedger(account.getJSONArray("ledger"));
+    }
+
+    // MODIFIES: this
+    // EFFECTS: adds a new financial entry to this accounts ledger and updates account information.
+    //          if no exceptions are thrown, returns true, indicating successful operation.
+    public boolean recordLedgerEntry(double amount, String description) {
         this.ledger.addEntry(amount, description);
         this.presentNetCashflow = this.ledger.getNetCashflow();
+        return true;
     }
 
     // EFFECTS: returns account's identifier.
@@ -71,13 +81,13 @@ public class FinancialAccount {
         this.targetNetCashflow = targetNetCashflow;
     }
 
-    // EFFECTS: returns a financial summary of this account.
-    public String repr() {
+    // EFFECTS: returns the console string representation of the summary of this financial account.
+    public String consoleRepr() {
         String repr = "\n";
 
         // header
-        repr += "Financial Summary ():\n";
-        repr += "\n  Created: " + this.creationDatetime;
+        repr += "Financial Summary:\n";
+        repr += "\n  Created: " + this.created;
         repr += "\n  Account-ID: " + this.id;
         repr += "\n  Owner: " + this.firstname + " " + this.lastname;
 
@@ -87,7 +97,7 @@ public class FinancialAccount {
         }
 
         // body
-        repr += "\n  Ledger:\n" + this.ledger.repr(2);
+        repr += "\n  Ledger:\n" + this.ledger.consoleRepr(2);
         // footer
         repr += String.format("\n  Total Entries: %d", this.ledger.getTotalEntries());
         repr += String.format("\n  Present Net Cashflow: $%,.2f", this.ledger.getNetCashflow());
@@ -100,7 +110,18 @@ public class FinancialAccount {
         } else {
             repr += "\n  Financial Standing: below target 🔴";
         }
-
         return repr;
+    }
+
+    // EFFECTS: returns the [writable] JSON object representation of this financial account.
+    public JSONObject jsonRepr() {
+        return (new JSONObject())
+            .put("id", this.id)
+            .put("created", this.created)
+            .put("firstname", this.firstname)
+            .put("lastname", this.lastname)
+            .put("presentNetCashflow", this.presentNetCashflow)
+            .put("targetNetCashflow", this.targetNetCashflow)
+            .put("ledger", this.ledger.jsonRepr());
     }
 }

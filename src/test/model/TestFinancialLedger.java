@@ -1,10 +1,9 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFinancialLedger {
 
@@ -135,5 +134,23 @@ public class TestFinancialLedger {
 
         fl.addEntry(-11, "outflow entry 7");
         assertEquals(0, fl.getNetCashflow());
+    }
+
+    @Test
+    public void testConsoleRepr() {
+        fl.addEntry(1, "desc 1");
+        fl.addEntry(-2, "desc 2");
+        fl.addEntry(3, "desc 3");
+        assertNotNull(fl.consoleRepr(2));
+        assertNotEquals("", fl.consoleRepr(2));
+    }
+
+    @Test
+    public void testJsonRepr() {
+        fl.addEntry(1, "desc 1");
+        fl.addEntry(-2, "desc 2");
+        fl.addEntry(3, "desc 3");
+        assertNotNull(fl.jsonRepr());
+        assertNotEquals("", fl.jsonRepr());
     }
 }

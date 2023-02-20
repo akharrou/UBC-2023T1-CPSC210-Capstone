@@ -3,13 +3,31 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class FinancialLedger {
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class FinancialLedger implements Writable<JSONArray> {
 
     private List<FinancialEntry> ledger;
 
+    // EFFECTS: instantiates an empty financial ledger.
     public FinancialLedger() {
         this.ledger = new ArrayList<FinancialEntry>();
+    }
+
+    // EFFECTS: instantiates a financial ledger from a JSON representation of a ledger.
+    // CITATIONS:
+    //  [1]: https://stackoverflow.com/a/54260629/13992057
+    public FinancialLedger(JSONArray ledger) {
+        this.ledger = (List<FinancialEntry>)
+            IntStream.range(0, ledger.length())
+                .mapToObj(i -> {
+                    JSONObject e = ledger.getJSONObject(i);
+                    return e.getString("type").equals("inflow")
+                        ? new Inflow(e) : new Outflow(e); })
+                .collect(Collectors.toList());
     }
 
     // EFFECTS: adds a financial inflow or outflow to account's
@@ -111,20 +129,19 @@ public class FinancialLedger {
     }
 
     // EFFECTS: get a string representation of the entire financial ledger
-    public String repr(int ntabs) {
-        return this.reprInflows(ntabs) + this.reprOutflows(ntabs);
+    public String consoleRepr(int ntabs) {
+        return this.consoleReprInflows(ntabs) + this.consoleReprOutflows(ntabs);
     }
 
     // EFFECTS: get a string representation of all inflows in ledger
-    public String reprInflows(int ntabs) {
+    public String consoleReprInflows(int ntabs) {
         return (this.getTotalInflowEntries() < 1) ? "\n" :
             String.format("\n%s%s\n", "    ".repeat(ntabs), "Inflows:")
             + this.ledger.stream()
                 .filter(entry -> entry instanceof Inflow)
-                .map(entry -> entry.repr(ntabs + 1))
+                .map(entry -> entry.consoleRepr(ntabs + 1))
                 .reduce(String.format("%s%-6s %-20s %-20s %s", "    ".repeat(ntabs + 1),
-                    "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n"
-                    + entryRepr))
+                    "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n" + entryRepr))
             + "\n\n"
             + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
                 this.getTotalInflowEntries())
@@ -137,15 +154,14 @@ public class FinancialLedger {
     }
 
     // EFFECTS: get a string representation of all outflows in ledger
-    public String reprOutflows(int ntabs) {
+    public String consoleReprOutflows(int ntabs) {
         return (this.getTotalOutflowEntries() < 1) ? "" :
             String.format("\n%s%s\n", "    ".repeat(ntabs), "Outflows:")
             + this.ledger.stream()
                 .filter(entry -> entry instanceof Outflow)
-                .map(entry -> entry.repr(ntabs + 1))
+                .map(entry -> entry.consoleRepr(ntabs + 1))
                 .reduce(String.format("%s%-6s %-20s %-20s %s", "    ".repeat(ntabs + 1),
-                    "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n"
-                    + entryRepr))
+                    "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n" + entryRepr))
             + "\n\n"
             + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
                 this.getTotalOutflowEntries())
@@ -155,6 +171,12 @@ public class FinancialLedger {
                 this.getAverageOutflow())
             + String.format("%s%41s $%,.2f\n", "    ".repeat(ntabs + 1), "Total: " + ".".repeat(41),
                 this.getOutflowSum());
+    }
+
+    public JSONArray jsonRepr() {
+        JSONArray jsonArr = new JSONArray();
+        this.ledger.stream().forEachOrdered(e -> jsonArr.put(e.jsonRepr()));
+        return jsonArr;
     }
 
 }
