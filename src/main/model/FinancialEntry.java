@@ -33,6 +33,14 @@ public abstract class FinancialEntry implements Writable {
         this.created = entry.getString("created");
     }
 
+    // REQUIRES: non-negative ntabs
+    // EFFECTS: returns entry's string console representation.
+    public String consoleRepr(int ntabs) {
+        String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
+        return String.format("%s%-6s %-20s %-20s $%,.2f", tabulation,
+            this.id, this.created, this.description, this.amount);
+    }
+
     // EFFECTS: returns entry's JSON representation.
     public JSONObject jsonRepr() {
         return (new JSONObject())
@@ -41,14 +49,6 @@ public abstract class FinancialEntry implements Writable {
             .put("created", this.created)
             .put("amount", this.amount)
             .put("description", this.description);
-    }
-
-    // REQUIRES: non-negative ntabs
-    // EFFECTS: returns entry's string console representation.
-    public String consoleRepr(int ntabs) {
-        String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
-        return String.format("%s%-6s %-20s %-20s $%,.2f", tabulation,
-            this.id, this.created, this.description, this.amount);
     }
 
     // EFFECTS: returns entry's identifier.

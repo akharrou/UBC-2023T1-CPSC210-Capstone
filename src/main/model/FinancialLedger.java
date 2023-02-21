@@ -18,21 +18,20 @@ public class FinancialLedger {
         this.ledger = new ArrayList<FinancialEntry>();
     }
 
-    // REQUIRES: non-null JSONArray with key-values reflecting a ledger with financial entries.
     // EFFECTS: constructs the financial ledger represented by the given JSON array.
     // CITATIONS:
     //  [1]: https://stackoverflow.com/a/54260629/13992057
+    //  [2]: https://stackoverflow.com/a/21920224/13992057 + IDE popup docs
     public FinancialLedger(JSONArray ledger) {
         this.ledger = (List<FinancialEntry>)
             IntStream.range(0, ledger.length())
-                .mapToObj(i -> {
+                .mapToObj((i) -> {
                     JSONObject e = ledger.getJSONObject(i);
                     return e.getString("type").equals("inflow")
                         ? new Inflow(e) : new Outflow(e); })
                 .collect(Collectors.toList());
     }
 
-    // REQUIRES: non-null ledger list field
     // MODIFIES: this
     // EFFECTS: adds a financial entry to this financial ledger list with an amount and description.
     //          if amount >= 0 → the entry is recorded as an inflow
@@ -45,20 +44,17 @@ public class FinancialLedger {
         }
     }
 
-    // REQUIRES: non-null ledger list field
     // MODIFIES: this
     // EFFECTS: removes all entries from this ledger list.
     public void drop() {
         this.ledger.clear();
     }
 
-    // REQUIRES: non-null ledger list field
     // EFFECTS: returns the number of entries in this ledger list.
     public int getTotalEntries() {
         return this.ledger.size();
     }
 
-    // REQUIRES: non-null ledger list field
     // EFFECTS: returns the number of inflow entries in this ledger list.
     public long getTotalInflowEntries() {
         return this.ledger.stream()
@@ -66,7 +62,6 @@ public class FinancialLedger {
             .count();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns the sum of inflows in this ledger list.
     public double getInflowSum() {
         return this.ledger.stream()
@@ -75,7 +70,6 @@ public class FinancialLedger {
             .sum();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns the average inflow amount in this ledger list.
     public double getAverageInflow() {
         return this.ledger.stream()
@@ -85,7 +79,6 @@ public class FinancialLedger {
             .getAsDouble();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns the median inflow amount in this ledger list.
     public double getMedianInflow() {
         List<FinancialEntry> inflows = this.ledger.stream()
@@ -101,7 +94,6 @@ public class FinancialLedger {
         }
     }
 
-    // REQUIRES: non-null ledger list field
     // EFFECTS: returns a count of the number of outflow entries in the ledger.
     public long getTotalOutflowEntries() {
         return this.ledger.stream()
@@ -109,7 +101,6 @@ public class FinancialLedger {
             .count();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns sum of outflows
     public double getOutflowSum() {
         return this.ledger.stream()
@@ -118,7 +109,6 @@ public class FinancialLedger {
             .sum();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns ledger's average outflow entry.
     public double getAverageOutflow() {
         return this.ledger.stream()
@@ -128,7 +118,6 @@ public class FinancialLedger {
             .getAsDouble();
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns ledger's median outflow entry.
     public double getMedianOutflow() {
         List<FinancialEntry> outflows = this.ledger.stream()
@@ -144,7 +133,6 @@ public class FinancialLedger {
         }
     }
 
-    // REQUIRES: non-null ledger list field
     // EFFECTS: returns ledger's net cashflow
     public double getNetCashflow() {
         return this.getInflowSum() - this.getOutflowSum();
@@ -156,7 +144,6 @@ public class FinancialLedger {
     }
 
     // REQUIRES: non-negative ntabs
-    //           ∧ non-null ledger list field of non-null financial entries
     // EFFECTS: get a string representation of all inflows in ledger
     // CITATIONS:
     //  [1]: https://stackoverflow.com/a/6857936/13992057
@@ -181,7 +168,6 @@ public class FinancialLedger {
     }
 
     // REQUIRES: non-negative ntabs
-    //           ∧ non-null ledger list field of non-null financial entries
     // EFFECTS: get a string representation of all outflows in ledger
     public String consoleReprOutflows(int ntabs) {
         String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
@@ -203,7 +189,6 @@ public class FinancialLedger {
             + String.format("%s%41s $%,.2f\n", tabulationPlus, "Total: " + tabulation41, this.getOutflowSum());
     }
 
-    // REQUIRES: non-null ledger list field of non-null financial entries
     // EFFECTS: returns the [writable] JSON array representation of this financial ledger
     //          with all its financial entries.
     public JSONArray jsonRepr() {
