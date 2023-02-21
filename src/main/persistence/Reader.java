@@ -12,7 +12,7 @@ public class Reader {
     // REQUIRES: non-null string
     // EFFECTS: reads source file as string and returns it
     //          throws IOException if an I/O error occurs whilst opening the file
-    public String read(String sourcePath) throws IOException {
+    public static String read(String sourcePath) throws IOException {
         return Files.lines(Paths.get(sourcePath), StandardCharsets.UTF_8).collect(Collectors.joining());
     }
 
