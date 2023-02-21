@@ -158,45 +158,49 @@ public class FinancialLedger {
     // REQUIRES: non-negative ntabs
     //           ∧ non-null ledger list field of non-null financial entries
     // EFFECTS: get a string representation of all inflows in ledger
+    // CITATIONS:
+    //  [1]: https://stackoverflow.com/a/6857936/13992057
     public String consoleReprInflows(int ntabs) {
+        String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
+        String tabulationPlus = String.format("%0" + (ntabs + 1) + "d", 0).replace("0", "    ");
+        String tabulation39 = String.format("%0" + 39 + "d", 0).replace("0", ".");
+        String tabulation40 = String.format("%0" + 40 + "d", 0).replace("0", ".");
+        String tabulation41 = String.format("%0" + 41 + "d", 0).replace("0", ".");
         return (this.getTotalInflowEntries() < 1) ? "\n" :
-            String.format("\n%s%s\n", "    ".repeat(ntabs), "Inflows:")
+            String.format("\n%s%s\n", tabulation, "Inflows:")
             + this.ledger.stream()
                 .filter(entry -> entry instanceof Inflow)
                 .map(entry -> entry.consoleRepr(ntabs + 1))
-                .reduce(String.format("%s%-6s %-20s %-20s %s", "    ".repeat(ntabs + 1),
+                .reduce(String.format("%s%-6s %-20s %-20s %s", tabulationPlus,
                     "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n" + entryRepr))
             + "\n\n"
-            + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
-                this.getTotalInflowEntries())
-            + String.format("%s%40s $%,.2f\n", "    ".repeat(ntabs + 1), "Median: " + ".".repeat(40),
-                this.getMedianInflow())
-            + String.format("%s%39s $%,.2f\n", "    ".repeat(ntabs + 1), "Average: " + ".".repeat(39),
-                this.getAverageInflow())
-            + String.format("%s%41s $%,.2f\n", "    ".repeat(ntabs + 1), "Total: " + ".".repeat(41),
-                this.getInflowSum());
+            + String.format("%s%39s %d\n", tabulationPlus, "Entries: " + tabulation39, this.getTotalInflowEntries())
+            + String.format("%s%40s $%,.2f\n", tabulationPlus, "Median: " + tabulation40, this.getMedianInflow())
+            + String.format("%s%39s $%,.2f\n", tabulationPlus, "Average: " + tabulation39, this.getAverageInflow())
+            + String.format("%s%41s $%,.2f\n", tabulationPlus, "Total: " + tabulation41, this.getInflowSum());
     }
 
     // REQUIRES: non-negative ntabs
     //           ∧ non-null ledger list field of non-null financial entries
     // EFFECTS: get a string representation of all outflows in ledger
     public String consoleReprOutflows(int ntabs) {
+        String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
+        String tabulationPlus = String.format("%0" + (ntabs + 1) + "d", 0).replace("0", "    ");
+        String tabulation39 = String.format("%0" + 39 + "d", 0).replace("0", ".");
+        String tabulation40 = String.format("%0" + 40 + "d", 0).replace("0", ".");
+        String tabulation41 = String.format("%0" + 41 + "d", 0).replace("0", ".");
         return (this.getTotalOutflowEntries() < 1) ? "" :
-            String.format("\n%s%s\n", "    ".repeat(ntabs), "Outflows:")
+            String.format("\n%s%s\n", tabulation, "Outflows:")
             + this.ledger.stream()
                 .filter(entry -> entry instanceof Outflow)
                 .map(entry -> entry.consoleRepr(ntabs + 1))
-                .reduce(String.format("%s%-6s %-20s %-20s %s", "    ".repeat(ntabs + 1),
+                .reduce(String.format("%s%-6s %-20s %-20s %s", tabulationPlus,
                     "ID", "Created", "Description", "Amount"), (accum, entryRepr) -> (accum + "\n" + entryRepr))
             + "\n\n"
-            + String.format("%s%39s %d\n", "    ".repeat(ntabs + 1), "Entries: " + ".".repeat(39),
-                this.getTotalOutflowEntries())
-            + String.format("%s%40s $%,.2f\n", "    ".repeat(ntabs + 1), "Median: " + ".".repeat(40),
-                this.getMedianOutflow())
-            + String.format("%s%39s $%,.2f\n", "    ".repeat(ntabs + 1), "Average: " + ".".repeat(39),
-                this.getAverageOutflow())
-            + String.format("%s%41s $%,.2f\n", "    ".repeat(ntabs + 1), "Total: " + ".".repeat(41),
-                this.getOutflowSum());
+            + String.format("%s%39s %d\n", tabulationPlus, "Entries: " + tabulation39, this.getTotalOutflowEntries())
+            + String.format("%s%40s $%,.2f\n", tabulationPlus, "Median: " + tabulation40, this.getMedianOutflow())
+            + String.format("%s%39s $%,.2f\n", tabulationPlus, "Average: " + tabulation39, this.getAverageOutflow())
+            + String.format("%s%41s $%,.2f\n", tabulationPlus, "Total: " + tabulation41, this.getOutflowSum());
     }
 
     // REQUIRES: non-null ledger list field of non-null financial entries

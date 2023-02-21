@@ -51,7 +51,8 @@ public abstract class FinancialEntry implements Writable {
     // REQUIRES: non-negative ntabs
     // EFFECTS: returns entry's string console representation.
     public String consoleRepr(int ntabs) {
-        return String.format("%s%-6s %-20s %-20s $%,.2f", "    ".repeat(ntabs),
+        String tabulation = String.format("%0" + ntabs + "d", 0).replace("0", "    ");
+        return String.format("%s%-6s %-20s %-20s $%,.2f", tabulation,
             this.id, this.created, this.description, this.amount);
     }
 
