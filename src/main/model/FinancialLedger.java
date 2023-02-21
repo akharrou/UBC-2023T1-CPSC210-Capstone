@@ -10,8 +10,7 @@ import org.json.JSONObject;
 
 // !TODO: double check all is tested
 // Represents a financial ledger having a collection of financial (inflow or outflow) entries.
-public class FinancialLedger
-        implements Writable<JSONArray> {
+public class FinancialLedger {
 
     private List<FinancialEntry> ledger;
 

@@ -3,21 +3,18 @@ package ui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
 import model.FinancialAccount;
 import model.InvalidInputException;
+import persistence.Reader;
+import persistence.Writer;
 
 // Financial tracker application.
 // !TODO: double check all is tested
@@ -188,31 +185,23 @@ public class App {
     }
 
     // REQUIRES: logged-in ≡ non-null account
-    // EFFECTS: saves currently logged-in financial account data to disk file, as JSON.
-    //          the financial account can subsequently be loaded back from said file.
-    // CITATIONS:
-    //  [1]: https://stackoverflow.com/a/2885224/13992057
+    // EFFECTS: saves/writes currently logged-in financial account data to disk file, as JSON.
+    //          the financial account can subsequently be loaded back from said [JSON] file.
     private void save() {
-        try (PrintWriter pw = new PrintWriter(new File(DATA_DIR + this.account.getID() + ".json"))) {
-            pw.print(this.account.jsonRepr().toString(4));
+        try {
+            Writer.writeObject(this.account, DATA_DIR + this.account.getID() + ".json");
         } catch (FileNotFoundException e) {
-            System.out.print("Save failed. Sorry your data will be lost.");
-            sleep(1500);
+            System.err.print(e.getMessage());
+            this.sleep(1500);
         }
     }
 
-    // REQUIRES: input file path (accountFilepath) must be the path of an existing ∧ regular ∧ readable file
+    // REQUIRES: input file path (accountFilepath) must be the path to an existing ∧ regular ∧ readable disk file
     // MODIFIES: this
     // EFFECTS: loads previously saved financial account from disk file
     private void load(String accountFilepath) {
         try {
-            this.account =
-                new FinancialAccount(
-                    new JSONObject(
-                        Files.lines(Paths.get(accountFilepath), StandardCharsets.UTF_8)
-                        .collect(Collectors.joining())
-                    )
-                );
+            this.account = new FinancialAccount(new JSONObject(Reader.read(accountFilepath)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -238,7 +227,7 @@ public class App {
                 break;
             } catch (NumberFormatException e) {
                 System.err.print("Invalid input: must be numeric. ");
-                sleep(1500);
+                this.sleep(1500);
             }
         }
     }
@@ -303,11 +292,11 @@ public class App {
                 String description = this.scanner.next();
                 this.account.recordFinancialEntry(((input.equals(ADD_INFLOW_COMMAND)) ? amount : -amount), description);
                 System.out.print("Transaction successfully recorded.");
-                sleep(750);
+                this.sleep(750);
                 break;
             } catch (NumberFormatException e) {
                 System.err.print("Invalid input: must be numeric. ");
-                sleep(750);
+                this.sleep(750);
                 this.eraseLine();
                 this.moveUpNLines(1);
                 this.eraseLine();
@@ -334,7 +323,7 @@ public class App {
                 break;
             } catch (InvalidInputException e) {
                 System.err.print(e.getMessage());
-                sleep(1500);
+                this.sleep(1500);
                 this.eraseLine();
                 this.moveUpNLines(1);
                 this.eraseLine();
@@ -366,7 +355,7 @@ public class App {
                 break;
             } catch (InvalidInputException e) {
                 System.err.print(e.getMessage());
-                sleep(1500);
+                this.sleep(1500);
                 System.out.print("\033[2K" + "\033[1A" + "\033[2K" + "\r> ");
             }
         }

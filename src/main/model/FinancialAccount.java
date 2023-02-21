@@ -6,11 +6,12 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
+import persistence.Writable;
+
 // Represents the financial account of some user. Holds profile information about the user,
 //   and crucially a financial ledger of all of the user's financial inflows and outflows.
 // !TODO: double check all is tested
-public class FinancialAccount
-        implements Writable<JSONObject> {
+public class FinancialAccount implements Writable {
 
     private final UUID id;
     private final String created;
