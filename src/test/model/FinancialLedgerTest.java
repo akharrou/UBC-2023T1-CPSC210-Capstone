@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestFinancialLedger {
+public class FinancialLedgerTest {
 
     FinancialLedger fl;
 

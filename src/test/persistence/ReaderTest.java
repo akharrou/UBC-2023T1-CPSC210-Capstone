@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import model.FinancialAccount;
 import model.FinancialLedger;
 
-public class TestReader {
+public class ReaderTest {
 
     @Test
     void testReaderNonExistentFile() {

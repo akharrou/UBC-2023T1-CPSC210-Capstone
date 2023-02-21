@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import model.FinancialAccount;
 
-public class TestWriter {
+public class WriterTest {
     // NOTE: the strategy is to write data to a file and then use the reader to read
     //       it back in and check that we read in a copy of what was written out.
 

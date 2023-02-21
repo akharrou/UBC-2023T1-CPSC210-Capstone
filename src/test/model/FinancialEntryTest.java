@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TestFinancialEntry {
+public class FinancialEntryTest {
 
     FinancialEntry fi0;
     FinancialEntry fi1;
