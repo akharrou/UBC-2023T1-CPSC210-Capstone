@@ -268,7 +268,7 @@ public class App {
         while (true) {
             try {
                 System.out.print("\r" + ((input.equalsIgnoreCase(ADD_INFLOW_COMMAND))
-                    ? "Inflow " : "Outflow ") + "amount: ");
+                        ? "Inflow " : "Outflow ") + "amount: ");
                 double amount = Math.abs(Double.parseDouble(this.scanner.next()));
                 System.out.print("Description: ");
                 String description = this.scanner.next();
