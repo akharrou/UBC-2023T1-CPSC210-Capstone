@@ -14,7 +14,7 @@ public class TestFinancialAccount {
 
     @BeforeEach
     public void setup() {
-        fa = new FinancialAccount("John", "Doe", 0.0);
+        fa = new FinancialAccount("John", "Doe");
     }
 
     @Test
@@ -28,19 +28,19 @@ public class TestFinancialAccount {
     @Test
     public void testRecordLedgerEntry() {
 
-        assertTrue(fa.recordLedgerEntry(0.00, "entry 1"));
+        fa.recordFinancialEntry(0.00, "entry 1");
         assertEquals(0.00, fa.getPresentNetCashflow());
 
-        assertTrue(fa.recordLedgerEntry(30.00, "entry 2"));
+        fa.recordFinancialEntry(30.00, "entry 2");
         assertEquals(30.00, fa.getPresentNetCashflow());
 
-        assertTrue(fa.recordLedgerEntry(-25.00, "entry 3"));
+        fa.recordFinancialEntry(-25.00, "entry 3");
         assertEquals(5.00, fa.getPresentNetCashflow());
 
-        assertTrue(fa.recordLedgerEntry(-105.00, "entry 4"));
+        fa.recordFinancialEntry(-105.00, "entry 4");
         assertEquals(-100.00, fa.getPresentNetCashflow());
 
-        assertTrue(fa.recordLedgerEntry(1111.00, "entry 5"));
+        fa.recordFinancialEntry(1111.00, "entry 5");
         assertEquals(1011.00, fa.getPresentNetCashflow());
     }
 
@@ -67,15 +67,15 @@ public class TestFinancialAccount {
         assertNotEquals("", fa.consoleRepr());
 
         // PCF = $30.00
-        fa.recordLedgerEntry(0.00, "entry 1");
-        fa.recordLedgerEntry(30.00, "entry 2");
+        fa.recordFinancialEntry(0.00, "entry 1");
+        fa.recordFinancialEntry(30.00, "entry 2");
         assertNotNull(fa.consoleRepr());
         assertNotEquals("", fa.consoleRepr());
 
         // PCF = $1011.00
-        fa.recordLedgerEntry(-25.00, "entry 3");
-        fa.recordLedgerEntry(-105.00, "entry 4");
-        fa.recordLedgerEntry(1111.00, "entry 5");
+        fa.recordFinancialEntry(-25.00, "entry 3");
+        fa.recordFinancialEntry(-105.00, "entry 4");
+        fa.recordFinancialEntry(1111.00, "entry 5");
         assertNotNull(fa.consoleRepr());
         assertNotEquals("", fa.consoleRepr());
     }
@@ -86,16 +86,16 @@ public class TestFinancialAccount {
         assertNotEquals("", fa.jsonRepr());
 
         // PCF = $30.00
-        fa.recordLedgerEntry(0.00, "entry 1");
-        fa.recordLedgerEntry(30.00, "entry 2");
+        fa.recordFinancialEntry(0.00, "entry 1");
+        fa.recordFinancialEntry(30.00, "entry 2");
         fa.setTargetNetCashflow(30);
         assertNotNull(fa.jsonRepr());
         assertNotEquals("", fa.jsonRepr());
 
         // PCF = $1011.00
-        fa.recordLedgerEntry(-25.00, "entry 3");
-        fa.recordLedgerEntry(-105.00, "entry 4");
-        fa.recordLedgerEntry(1111.00, "entry 5");
+        fa.recordFinancialEntry(-25.00, "entry 3");
+        fa.recordFinancialEntry(-105.00, "entry 4");
+        fa.recordFinancialEntry(1111.00, "entry 5");
         fa.setTargetNetCashflow(-23.42);
         assertNotNull(fa.jsonRepr());
         assertNotEquals("", fa.jsonRepr());

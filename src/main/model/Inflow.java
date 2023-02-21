@@ -2,6 +2,7 @@ package model;
 
 import org.json.JSONObject;
 
+// Represents a financial inflow (non-negative amount) entry.
 public class Inflow extends FinancialEntry {
 
     // EFFECTS: constructs new inflow from given input.

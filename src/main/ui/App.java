@@ -12,139 +12,184 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
 import model.FinancialAccount;
+import model.InvalidInputException;
 
 // Financial tracker application.
+// !TODO: double check all is tested
 public class App {
 
-    boolean appIsRunning;
-    boolean loggedIn;
     private Scanner scanner;
+    private boolean keepRunning;
     private FinancialAccount account;
 
     private static final String DATA_DIR = "./data/";
 
-    // init screen commands
+    // home-screen commands
     private static final String LOGIN_COMMAND = "l";
     private static final String REGISTER_COMMAND = "r";
     private static final String QUIT_COMMAND = "q";
-    // action screen
+
+    // action-screen commands
     private static final String ADD_INFLOW_COMMAND = "i";
     private static final String ADD_OUTFLOW_COMMAND = "o";
     private static final String GET_SUMMARY_COMMAND = "s";
     private static final String EDIT_GOAL_COMMAND = "e";
     private static final String RESET_ACCOUNT_COMMAND = "r";
     private static final String LOGOUT_COMMAND = "l";
-    // login screen
-    private static final String LOGOUT_W_SAVE_COMMAND = "y";
-    private static final String LOGOUT_WO_SAVE_COMMAND = "n";
 
-    // EFFECTS: runs the application
+    // EFFECTS: constructs, initializes, runs and terminates a new instance of the application.
     public App() {
-        this.run();
+        this.keepRunning = true;
+        this.scanner = (new Scanner(System.in)).useDelimiter("\n");
+        try {
+            this.run();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.print("\nQuitting application... ");
+        this.sleep(250);
     }
 
+    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: initializes, runs the user input handling main loop of, and terminates the application.
     public void run() {
-        this.init();
-        while (this.appIsRunning) {
+        while (this.keepRunning) {
             this.displayHomeScreen();
-            this.processHomeScreenInput(this.scanner.next().toLowerCase());
-            while (this.loggedIn) {
+            this.processHomeScreenInput();
+            while (this.isLoggedIn()) {
                 this.displayActionScreen();
-                this.processActionScreenInput(this.scanner.next().toLowerCase());
+                this.processActionScreenInput();
             }
         }
-        this.terminate();
     }
 
+    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
-    // EFFECTS: initializes app
-    private void init() {
-        this.appIsRunning = true;
-        this.loggedIn = false;
-        this.scanner = (new Scanner(System.in)).useDelimiter("\n");
-    }
-
-    private void terminate() {
-        System.out.println("\nLogging out.");
-    }
-
-    // MODIFIES: !TODO
-    // EFFECTS: !TODO creates and initializes account
+    // EFFECTS: prompts for user sign-up information
+    //          ∧ creates financial account based on given information
     private void register() {
-        try {
-            this.clearScreen();
-            System.out.print("Register:" + "\n" + "\n  First: ");
-            String first = this.scanner.next();
-            System.out.print("  Last: ");
-            String last = this.scanner.next();
-            System.out.print("\nWelcome " + first + " " + last + ".\nOne last step, set your financial goal !\n");
-            // !TOFIX: do something if first and/or last are empty strings
-            double targetNetCashflow;
-            while (true) {
-                try {
-                    System.out.print("\n  Target Cashflow: ");
-                    targetNetCashflow = Math.abs(Double.parseDouble(this.scanner.next()));
-                    break;
-                } catch (NumberFormatException e) {
-                    System.err.println("Invalid format: must be numeric input.");
-                    // !TOFIX doesn't erase lines
-                }
-            }
-            this.account = new FinancialAccount(first, last, targetNetCashflow);
-        } catch (Exception e) {
-            this.account = null;
-            System.err.println("Account creation failed, aborting.");
-        }
-        this.loggedIn = (this.account != null);
-    }
-
-    // MODIFIES: !TODO
-    // EFFECTS: !TODO
-    private void login() {
-        this.clearScreen();
-        System.out.print("\nLogin:" + "\n" + "\n  Account-ID: ");
-        String accID = this.scanner.next().toLowerCase();
-        List<File> dirListing = Arrays.asList((new File(DATA_DIR)).listFiles(File::canRead));
-        String dataFilepath = dirListing.stream()
-                .map(File::getName)
-                .filter(p -> p.startsWith(accID))
-                .findFirst()
-                .orElse(null);
-        if (dataFilepath == null) {
-            System.out.print("Account not found. You can register or try again.");
+        while (true) {
             try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (Exception e) { /* ignore */ }
-        } else {
-            this.loggedIn = true;
-            System.out.print("Resume from saved session ? (Y/n) ");
-            String input = this.scanner.next().toLowerCase();
-            if (input.equals("y") || input.equals("")) {
-                System.out.print("Loading session... ");
-                load(DATA_DIR + dataFilepath);
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (Exception e) { /* ignore */ }
+                System.out.print("\033\143" + "Register:" + "\n" + "\n  First: ");
+                String first = this.scanner.next();
+                System.out.print("  Last: ");
+                String last = this.scanner.next();
+                if (first.length() < 1 || last.length() < 1) {
+                    throw new InvalidInputException(first + " " + last);
+                }
+                System.out.print("\033\143" + "Creating account... ");
+                this.account = new FinancialAccount(first, last);
+                this.sleep(1500);
+                this.editGoal();
+                break;
+            } catch (InvalidInputException e) {
+                System.err.print("\nInvalid input '" + e.getInvalidInput()
+                                + "': first and last names must be >0 characters.");
+                this.sleep(2000);
             }
         }
     }
 
-    // MODIFIES: !TODO
-    // EFFECTS: !TODO
-    private void logout() {
-        System.out.print("Would you like to save your session before leaving ? (Y/n) ");
-        processLogoutScreenInput(this.scanner.next().toLowerCase());
-        this.loggedIn = false;
+    // REQUIRES: non-null & initialized scanner
+    // MODIFIES: this
+    // EFFECTS: prompts for user sign-in information
+    //          ∧ (optionally) loads saved financial account corresponding to sign-in info
+    private void login() {
+        while (true) {
+            try {
+                System.out.print("\033\143" + "Login:" + "\n" + "\n  Account-ID: ");
+                String accID = this.scanner.next().toLowerCase();
+                if (accID.length() < 3) {
+                    throw new InvalidInputException(accID);
+                }
+                List<File> dirListing = Arrays.asList((new File(DATA_DIR)).listFiles(File::canRead));
+                String dataFilepath = dirListing.stream().map(File::getName)
+                        .filter(pathname -> pathname.startsWith(accID))
+                        .findFirst().orElse(null);
+                if (dataFilepath == null) {
+                    System.out.print("\nAccount not found. You can register or try again.");
+                    sleep(2000);
+                } else {
+                    resume(dataFilepath);
+                }
+                break;
+            } catch (InvalidInputException e) {
+                System.err.print("\nInvalid input '" + e.getInvalidInput() + "': must be >2 characters. Try again.");
+                this.sleep(2000);
+            }
+        }
     }
 
+    // REQUIRES: non-null & initialized scanner
+    //           ∧ logged-in ≡ non-null account
+    //           ∧ non-null input file (dataFilepath)
+    // MODIFIES: this
+    // EFFECTS: resumes application from a previously saved session or launches a fresh session,
+    //          according to user input.
+    //          if user responds affirmatively → loads saved user profile AND ledger
+    //          if user responds negatively → only loads saved user profile
+    private void resume(String dataFilepath) {
+        while (true) {
+            try {
+                System.out.print("\033\143" + "Resume from last saved session ? (Y/n) ");
+                String input = this.scanner.next();
+                if (input.equalsIgnoreCase("y") || input.equals("")) {
+                    System.out.print("\033\143" + "Loading session... ");
+                    load(DATA_DIR + dataFilepath);
+                    this.sleep(1500);
+                } else if (input.equalsIgnoreCase("n")) {
+                    System.out.print("\033\143" + "Preparing new session... ");
+                    load(DATA_DIR + dataFilepath);
+                    this.account.reset();
+                    this.sleep(1500);
+                    this.editGoal();
+                } else {
+                    throw new InvalidInputException(input);
+                }
+                break;
+            } catch (InvalidInputException e) {
+                System.err.println(e.getMessage());
+                this.sleep(1500);
+            }
+        }
+    }
+
+    // REQUIRES: non-null & initialized scanner
+    // MODIFIES: this
+    // EFFECTS: logs out of currently logged-in financial account, either saving the currently
+    //          logged-in financial account data in the process or not, according to user input.
+    private void logout() {
+        while (true) {
+            System.out.print("\033\143" + "Save session ? (Y/n) ");
+            String input = this.scanner.next();
+            try {
+                if (input.equalsIgnoreCase("y") || input.equals("")) {
+                    System.out.print("\033\143" + "Saving session... ");
+                    save();
+                } else if (input.equalsIgnoreCase("n")) {
+                    System.out.print("\033\143" + "Discarding session... ");
+                } else {
+                    throw new InvalidInputException(input);
+                }
+                sleep(1500);
+                break;
+            } catch (InvalidInputException e) {
+                System.err.print(e.getMessage());
+                sleep(1500);
+            }
+        }
+        this.account = null;
+    }
+
+    // REQUIRES: logged-in ≡ non-null account
+    // EFFECTS: saves currently logged-in financial account data to disk file, as JSON.
+    //          the financial account can subsequently be loaded back from said file.
     // CITATIONS:
     //  [1]: https://stackoverflow.com/a/2885224/13992057
     private void save() {
@@ -152,14 +197,13 @@ public class App {
             pw.print(this.account.jsonRepr().toString(4));
         } catch (FileNotFoundException e) {
             System.out.print("Save failed. Sorry your data will be lost.");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (Exception e1) { /* ignore */ }
+            sleep(1500);
         }
     }
 
-    // REQUIRES: accountDataFilepath must be a regular readable file
-    // EFFECTS: !TODO
+    // REQUIRES: input file path (accountFilepath) must be the path of an existing ∧ regular ∧ readable file
+    // MODIFIES: this
+    // EFFECTS: loads previously saved financial account from disk file
     private void load(String accountFilepath) {
         try {
             this.account =
@@ -175,51 +219,95 @@ public class App {
     }
 
     // MODIFIES: this
-    // EFFECTS: sets app in quit state in preparation of app termination.
+    // EFFECTS: logouts and sets application in termination state.
     private void quit() {
-        this.appIsRunning = false;
-        this.loggedIn = false;
+        this.account = null;
+        this.keepRunning = false;
     }
 
-    // EFFECTS: !TODO
-    private void editTargetNetCashflow() {
+    // REQUIRES: non-null & initialized scanner
+    //           ∧ logged-in ≡ non-null account
+    // MODIFIES: this
+    // EFFECTS: modifies the target cashflow goal of the curently logged-in financial
+    //          account to that specified by user input.
+    private void editGoal() {
         while (true) {
-            clearScreen();
             try {
-                System.out.print("New Target Cashflow: ");
+                System.out.print("\033\143" + "Target Cashflow: ");
                 this.account.setTargetNetCashflow(Double.parseDouble(this.scanner.next()));
                 break;
             } catch (NumberFormatException e) {
-                System.err.println("Invalid format: must be numeric input.");
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e1) { /* ignore */ }
-                this.moveUpNLines(1);
-                this.eraseLine();
+                System.err.print("Invalid input: must be numeric. ");
+                sleep(1500);
             }
         }
     }
 
-    // EFFECTS: !TODO
-    private void addEntry(String input) {
+    // REQUIRES: non-null & initialized scanner
+    //           ∧ logged-in ≡ non-null account
+    // MODIFIES: this
+    // EFFECTS: resets (drops ledger of) the currently logged-in financial account or aborts (according to user input).
+    private void reset() {
         while (true) {
             try {
-                System.out.print(((input.equals(ADD_INFLOW_COMMAND)) ? "Inflow " : "Outflow ") + "amount: ");
-                double amount = Math.abs(Double.parseDouble(this.scanner.next()));
+                System.out.print(String.format(
+                        "\033\143" // clear screen
+                        + "Reseting your account will delete all entries currently in your ledger."
+                        + "\nProceed anyways ? (y/N) "
+                ));
+                String input = this.scanner.next();
+                if (input.equalsIgnoreCase("y")) {
+                    System.out.print("\033\143" + "Reseting account... ");
+                    this.account.reset();
+                } else if (input.equalsIgnoreCase("n") || input.equals("")) {
+                    System.out.print("\033\143" + "Reset aborted.");
+                } else {
+                    throw new InvalidInputException(input);
+                }
+                this.sleep(1500);
+                break;
+            } catch (InvalidInputException e) {
+                System.err.println(e.getMessage());
+                this.sleep(1500);
+            }
+        }
+    }
 
+    // REQUIRES: non-null & initialized scanner
+    //           ∧ logged-in ≡ non-null account
+    // EFFECTS: generates and displays to console a summary report of the currently logged-in financial account.
+    private void summarize() {
+        System.out.print(String.format(
+                "\033\143"
+                + this.account.consoleRepr()
+                + "\n"
+                + "\nPress 'Enter' to continue. "
+        ));
+        this.scanner.next();
+    }
+
+    // REQUIRES: non-null & initialized scanner
+    //           ∧ non-null lowercased input string
+    //           ∧ logged-in ≡ non-null account
+    // MODIFIES: this
+    // EFFECTS: processes user input and creates & records a financial inflow or outflow entry to the ledger
+    //          of the currently logged-in financial account, according to said processed user input.
+    //          if add inflow command was triggered → financial entry will be an inflow
+    //          else → will be an outflow
+    private void processFinancialEntry(String input) {
+        while (true) {
+            try {
+                System.out.print("\r" + ((input.equals(ADD_INFLOW_COMMAND)) ? "Inflow " : "Outflow ") + "amount: ");
+                double amount = Math.abs(Double.parseDouble(this.scanner.next()));
                 System.out.print("Description: ");
                 String description = this.scanner.next();
-
-                this.account.recordLedgerEntry(((input.equals(ADD_INFLOW_COMMAND)) ? amount : -amount), description);
+                this.account.recordFinancialEntry(((input.equals(ADD_INFLOW_COMMAND)) ? amount : -amount), description);
                 System.out.print("Transaction successfully recorded.");
+                sleep(750);
                 break;
             } catch (NumberFormatException e) {
-                System.err.println("Invalid format: must be numeric input.");
-            } finally {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) { /* ignore */ }
-                this.moveUpNLines(1);
+                System.err.print("Invalid input: must be numeric. ");
+                sleep(750);
                 this.eraseLine();
                 this.moveUpNLines(1);
                 this.eraseLine();
@@ -227,87 +315,68 @@ public class App {
         }
     }
 
+    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
-    // EFFECTS: !TODO creates and initializes account
-    private void processHomeScreenInput(String input) {
-        if (input.equals(LOGIN_COMMAND)) {
-            login();
-        } else if (input.equals(REGISTER_COMMAND)) {
-            register();
-        } else if (input.equals(QUIT_COMMAND)) {
-            quit();
-        } else {
-            System.out.print("Invalid input. Try again.");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) { /* ignore */ }
-        }
-    }
-
-    private void processActionScreenInput(String input) {
-        if (input.equals(ADD_INFLOW_COMMAND) || input.equals(ADD_OUTFLOW_COMMAND)) {
-            try {
-                this.addEntry(input);
-            } catch (Exception e) {
-                System.out.print("An error occurred.\nTry again. ");
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e1) { /* ignore */ }
-            }
-        } else if (input.equals(GET_SUMMARY_COMMAND)) {
-            this.clearScreen();
-            System.out.println(this.account.consoleRepr());
-            System.out.print("\nPress 'Enter' to continue. ");
-            this.scanner.next();
-        } else if (input.equals(EDIT_GOAL_COMMAND)) {
-            editTargetNetCashflow();
-        } else if (input.equals(RESET_ACCOUNT_COMMAND)) {
-            register(); // NOTE: could just have a this.account.resetLedger();
-        } else if (input.equals(LOGOUT_COMMAND)) {
-            logout();
-        } else {
-            System.out.print("Invalid input.\nTry again. ");
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) { /* ignore */ }
-            this.moveUpNLines(1);
-            this.eraseLine();
-        }
-    }
-
-    // MODIFIES: !TODO
-    // EFFECTS: !TODO
-    private void processLogoutScreenInput(String input) {
+    // EFFECTS: processes home-screen user-input
+    private void processHomeScreenInput() {
         while (true) {
-            // !TOFIX bad input makes it loop forever; input = this.scanner.next().toLowerCase();
-            if (input.equals(LOGOUT_W_SAVE_COMMAND) || input.equals("")) {
-                System.out.print("Saving session... ");
-                save();
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (Exception e) { /* ignore */ }
+            String input = this.scanner.next();
+            try {
+                if (input.equalsIgnoreCase(LOGIN_COMMAND)) {
+                    login();
+                } else if (input.equalsIgnoreCase(REGISTER_COMMAND)) {
+                    register();
+                } else if (input.equalsIgnoreCase(QUIT_COMMAND)) {
+                    quit();
+                } else {
+                    throw new InvalidInputException(input);
+                }
                 break;
-            } else if (input.equals(LOGOUT_WO_SAVE_COMMAND)) {
-                System.out.print("Discarding session... ");
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (Exception e) { /* ignore */ }
-                break;
-            } else {
-                System.out.print("Invalid input. Try again. ");
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (Exception e) { /* ignore */ }
+            } catch (InvalidInputException e) {
+                System.err.print(e.getMessage());
+                sleep(1500);
+                this.eraseLine();
                 this.moveUpNLines(1);
                 this.eraseLine();
+                System.out.print("\r> ");
             }
         }
     }
 
+    // REQUIRES: non-null & initialized scanner
+    // MODIFIES: this
+    // EFFECTS: processes action-screen user-input
+    private void processActionScreenInput() {
+        while (true) {
+            String input = this.scanner.next();
+            try {
+                if (input.equalsIgnoreCase(ADD_INFLOW_COMMAND) || input.equalsIgnoreCase(ADD_OUTFLOW_COMMAND)) {
+                    this.processFinancialEntry(input.toLowerCase());
+                } else if (input.equalsIgnoreCase(GET_SUMMARY_COMMAND)) {
+                    this.summarize();
+                } else if (input.equalsIgnoreCase(EDIT_GOAL_COMMAND)) {
+                    this.editGoal();
+                } else if (input.equalsIgnoreCase(RESET_ACCOUNT_COMMAND)) {
+                    this.reset();
+                } else if (input.equalsIgnoreCase(LOGOUT_COMMAND)) {
+                    this.logout();
+                } else {
+                    throw new InvalidInputException(input);
+                }
+                break;
+            } catch (InvalidInputException e) {
+                System.err.print(e.getMessage());
+                sleep(1500);
+                System.out.print("\033[2K" + "\033[1A" + "\033[2K" + "\r> ");
+            }
+        }
+    }
+
+    // EFFECTS: displays home-menu screen
     private void displayHomeScreen() {
-        this.clearScreen();
         System.out.print(
-                "Welcome to CPSC210P01-Financial-Tracker !"
+                "\033\143" // clear screen
+                + "Welcome to CPSC210P01-Financial-Tracker !"
                 + "\n"
                 + "\n  (" + LOGIN_COMMAND + ") login"
                 + "\n  (" + REGISTER_COMMAND + ") register"
@@ -317,48 +386,56 @@ public class App {
         );
     }
 
-    private void displayHeader() {
-        System.out.print(String.format(
-                "Datetime: %1$s"
-                + "\nLogged in as: %2$s"
-                + "\n"
-                + "\nPresent Net Cashflow: $%3$,.2f"
-                + "\nTarget Net Cashflow: $%4$,.2f",
-                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()),
-                this.account.getFirstname() + " " + this.account.getLastname(),
-                this.account.getPresentNetCashflow(),
-                this.account.getTargetNetCashflow()
-        ));
-    }
-
+    // REQUIRES: logged-in ≡ non-null account
+    // EFFECTS: displays action-menu screen
     private void displayActionScreen() {
-        this.clearScreen();
-        this.displayHeader();
-        System.out.print(
-                "\n\nActions:"
+        System.out.print(String.format(
+                "\033\143" // clear screen
+                + "Datetime: %s"
+                + "\nAccount: %s"
+                + "\nOwner: %s"
+                + "\n\nPresent Net Cashflow: $%,.2f"
+                + "\nTarget Net Cashflow: $%,.2f"
+                + "\n\nActions:"
                 + "\n\n  (" + ADD_INFLOW_COMMAND + ") record inflow"
                 + "\n  (" + ADD_OUTFLOW_COMMAND + ") record outflow"
                 + "\n  (" + GET_SUMMARY_COMMAND + ") get summary"
                 + "\n  (" + EDIT_GOAL_COMMAND + ") edit target"
                 + "\n  (" + RESET_ACCOUNT_COMMAND + ") reset acccount"
                 + "\n  (" + LOGOUT_COMMAND + ") logout"
-                + "\n"
-                + "\n> "
-        );
+                + "\n\n> ",
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now()),
+                this.account.getID(),
+                this.account.getFirstname() + " " + this.account.getLastname(),
+                this.account.getPresentNetCashflow(),
+                this.account.getTargetNetCashflow()
+        ));
     }
 
-    // EFFECTS: clear the console screen
-    private void clearScreen() {
-        System.out.print("\033\143");
+    // EFFECTS: returns true if an account is currently logged-in the application, and false otherwise.
+    private boolean isLoggedIn() {
+        return (this.account != null);
     }
 
-    // EFFECTS: move cursor up given number of lines.
+    // REQUIRES: non-negative nlines
+    // EFFECTS: moves cursor up a given number of lines.
     private void moveUpNLines(int nlines) {
         System.out.print(String.format("\033[%dA", nlines));
     }
 
-    // EFFECTS: erase current line contents.
+    // EFFECTS: erases current line contents.
     private void eraseLine() {
         System.out.print("\033[2K");
+    }
+
+    // REQUIRES: non-negative milliseconds
+    // EFFECTS: sleeps for specified number of seconds.
+    // CITATIONS:
+    //  [1]: https://stackoverflow.com/a/24104427
+    //  [2]: https://stackoverflow.com/a/24104332
+    private void sleep(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) { /* ignore */ }
     }
 }

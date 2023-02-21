@@ -22,8 +22,10 @@
     - [x] As a user, I want to be able to ( add | list ) one-time inflows <!-- (e.g. friend pays you 5 bucks cause X, you win the lotto) to my financial ledger -->
     - [x] As a user, I want to be able to ( add | list ) one-time outflows <!-- (e.g. parking fee, late payment fee, made an unexpected grocery, unexpected doctor’s appointment, paid for car crash damages) to my financial ledger -->
 - [x] As a user, I want to be able to get a financial summary report
-- [ ] As a user, when I select the quit option from the application menu, I want to be reminded and have the optional ablility to save my account data information and ledger to file
-- [ ] As a user, when I start the application, I want to be able I want to have the option to [login and] load my [previously saved] financial account and ledger data information from file.
+- [x] As a user, when I select the quit option from the application menu, I want to be reminded and have the optional ablility to save my account data information and ledger to file
+- [x] As a user, when I start the application, I want to be able I want to have the option to [login and] load my [previously saved] financial account and ledger data information from file.
+- [x] As a user, I want be able to create, save and reload multiple different accounts
+- [x] As a user, I want be able to get some statistics about my financial account (number of entries, average, median, totals)
 
 ## Domain Analysis
 

@@ -6,8 +6,9 @@ import java.util.UUID;
 
 import org.json.JSONObject;
 
-// Represents the financial account of some user. Holds information about the user,
-//   and crucially a financial ledger of all of a user's financial inflows and outflows.
+// Represents the financial account of some user. Holds profile information about the user,
+//   and crucially a financial ledger of all of the user's financial inflows and outflows.
+// !TODO: double check all is tested
 public class FinancialAccount
         implements Writable<JSONObject> {
 
@@ -19,18 +20,19 @@ public class FinancialAccount
     private double targetNetCashflow;
     private FinancialLedger ledger;
 
-    // EFFECTS: creates a new financial account populated with given input info.
-    public FinancialAccount(String first, String last, double targetNetCashflow) {
+    // EFFECTS: constructs a new financial account populated with a first and last name.
+    public FinancialAccount(String first, String last) {
         this.id = UUID.randomUUID();
         this.created = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
         this.firstname = first;
         this.lastname = last;
         this.presentNetCashflow = 0.0;
-        this.targetNetCashflow = targetNetCashflow;
+        this.targetNetCashflow = 0.0;
         this.ledger = new FinancialLedger();
     }
 
-    // EFFECTS: recreates the financial account represented by the JSON object.
+    // REQUIRES: non-null JSONObject
+    // EFFECTS: constructs the financial account represented by the given JSON object.
     public FinancialAccount(JSONObject account) {
         this.id = UUID.fromString(account.getString("id"));
         this.created = account.getString("created");
@@ -41,13 +43,13 @@ public class FinancialAccount
         this.ledger = new FinancialLedger(account.getJSONArray("ledger"));
     }
 
+    // REQUIRES: non-null financial ledger field
     // MODIFIES: this
-    // EFFECTS: adds a new financial entry to this accounts ledger and updates account information.
-    //          if no exceptions are thrown, returns true, indicating successful operation.
-    public boolean recordLedgerEntry(double amount, String description) {
+    // EFFECTS: creates and adds a new financial entry to this accounts ledger and updates account information.
+    //          if no exceptions are thrown, then the operation is considered successful.
+    public void recordFinancialEntry(double amount, String description) {
         this.ledger.addEntry(amount, description);
         this.presentNetCashflow = this.ledger.getNetCashflow();
-        return true;
     }
 
     // EFFECTS: returns account's identifier.
@@ -81,38 +83,48 @@ public class FinancialAccount
         this.targetNetCashflow = targetNetCashflow;
     }
 
-    // EFFECTS: returns the console string representation of the summary of this financial account.
+    // REQUIRES: non-null financial ledger field
+    // MODIFIES: this
+    // EFFECTS: resets this financial account (drops ledger entries a updates present net cashflow).
+    public void reset() {
+        this.ledger.drop();
+        this.presentNetCashflow = 0.0;
+    }
+
+    // REQUIRES: non-null financial ledger field
+    // EFFECTS: returns the console string representation of the summary report of this financial account.
     public String consoleRepr() {
-        String repr = "\n";
+        StringBuilder repr = new StringBuilder();
 
         // header
-        repr += "Financial Summary:\n";
-        repr += "\n  Created: " + this.created;
-        repr += "\n  Account-ID: " + this.id;
-        repr += "\n  Owner: " + this.firstname + " " + this.lastname;
+        repr.append("Financial Summary:\n");
+        repr.append("\n  Created: " + this.created);
+        repr.append("\n  Account-ID: " + this.id);
+        repr.append("\n  Owner: " + this.firstname + " " + this.lastname);
 
         if (this.ledger.getTotalEntries() < 1) {
-            repr += "\n  Total Entries: " + this.ledger.getTotalEntries();
-            return repr;
+            repr.append("\n  Total Entries: " + this.ledger.getTotalEntries());
+            return repr.toString();
         }
 
         // body
-        repr += "\n  Ledger:\n" + this.ledger.consoleRepr(2);
+        repr.append("\n  Ledger:\n" + this.ledger.consoleRepr(2));
         // footer
-        repr += String.format("\n  Total Entries: %d", this.ledger.getTotalEntries());
-        repr += String.format("\n  Present Net Cashflow: $%,.2f", this.ledger.getNetCashflow());
-        repr += String.format("\n  Target Net Cashflow: $%,.2f", this.targetNetCashflow);
+        repr.append(String.format("\n  Total Entries: %d", this.ledger.getTotalEntries()));
+        repr.append(String.format("\n  Present Net Cashflow: $%,.2f", this.ledger.getNetCashflow()));
+        repr.append(String.format("\n  Target Net Cashflow: $%,.2f", this.targetNetCashflow));
 
         if (this.presentNetCashflow > this.targetNetCashflow) {
-            repr += "\n  Financial Standing: above target 🟢";
+            repr.append("\n  Financial Standing: above target 🟢");
         } else if (this.presentNetCashflow == this.targetNetCashflow) {
-            repr += "\n  Financial Standing: on target 🟠";
+            repr.append("\n  Financial Standing: on target 🟠");
         } else {
-            repr += "\n  Financial Standing: below target 🔴";
+            repr.append("\n  Financial Standing: below target 🔴");
         }
-        return repr;
+        return repr.toString();
     }
 
+    // REQUIRES: non-null financial ledger field
     // EFFECTS: returns the [writable] JSON object representation of this financial account.
     public JSONObject jsonRepr() {
         return (new JSONObject())

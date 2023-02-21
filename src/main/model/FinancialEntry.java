@@ -6,7 +6,8 @@ import java.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 // Represents a financial entry (inflow or outflow) that is to be stored in a financial ledger.
-//   Inflows are by convention interpreted as non-negative values, and outflows as negative values.
+//   Inflows are by convention interpreted as being non-negative value amounts, and outflows as negative ones.
+// !TODO: double check all is tested
 public abstract class FinancialEntry
         implements Writable<JSONObject> {
 
@@ -15,8 +16,9 @@ public abstract class FinancialEntry
     protected final String description;
     protected final String created;
 
-    // EFFECTS: creates a new financial entry that
-    //          can be stored in a financial ledger
+    // EFFECTS: constructs a new financial entry with an id, amount and description.
+    //          datetime of creation is also stored as metadata.
+    //          the entry is intended to be stored in a financial ledger
     public FinancialEntry(int id, double amount, String description) {
         this.id = id;
         this.amount = Math.abs(amount);
@@ -24,8 +26,11 @@ public abstract class FinancialEntry
         this.created = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
     }
 
-    // EFFECTS: creates a new financial entry that
-    //          can be stored in a financial ledger
+    // REQUIRES: non-null JSONObject populated
+    //           ∧ with key-value pairs reflecting financial entry class fields and datatypes
+    //             (id, amount, description, created).
+    // EFFECTS: constructs a new financial entry from a JSONObject representation of said entry.
+    //          the entry is intended to be stored in a financial ledger,
     public FinancialEntry(JSONObject entry) {
         this.id = entry.getInt("id");
         this.amount = entry.getDouble("amount");
@@ -43,7 +48,8 @@ public abstract class FinancialEntry
             .put("description", this.description);
     }
 
-    // EFFECTS: returns entry's string representation.
+    // REQUIRES: non-negative ntabs
+    // EFFECTS: returns entry's string console representation.
     public String consoleRepr(int ntabs) {
         return String.format("%s%-6s %-20s %-20s $%,.2f", "    ".repeat(ntabs),
             this.id, this.created, this.description, this.amount);
@@ -65,7 +71,7 @@ public abstract class FinancialEntry
     }
 
     // EFFECTS: returns entry's creation datetime.
-    public String getcreated() {
+    public String getCreated() {
         return this.created;
     }
 }
