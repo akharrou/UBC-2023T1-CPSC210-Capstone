@@ -101,7 +101,7 @@ public class App {
         while (true) {
             try {
                 System.out.print("\033\143" + "Login:" + "\n" + "\n  Account-ID: ");
-                String accID = this.scanner.next().toLowerCase();
+                String accID = this.scanner.next();
                 if (accID.length() < 3) {
                     throw new InvalidInputException(accID);
                 }

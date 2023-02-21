@@ -8,7 +8,6 @@ import java.util.stream.IntStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-// !TODO: double check all is tested
 // Represents a financial ledger having a collection of financial (inflow or outflow) entries.
 public class FinancialLedger {
 
@@ -19,7 +18,7 @@ public class FinancialLedger {
         this.ledger = new ArrayList<FinancialEntry>();
     }
 
-    // REQUIRES: non-null JSONArray
+    // REQUIRES: non-null JSONArray with key-values reflecting a ledger with financial entries.
     // EFFECTS: constructs the financial ledger represented by the given JSON array.
     // CITATIONS:
     //  [1]: https://stackoverflow.com/a/54260629/13992057
@@ -94,10 +93,9 @@ public class FinancialLedger {
                 .sorted((e1, e2) -> (int) (e1.getAmount() - e2.getAmount()))
                 .collect(Collectors.toList());
         if (inflows.size() % 2 == 0) {
-            // the average of the two middle values; take i and i-1 (because indices and java always rounds down)
-            return (inflows.get(inflows.size() / 2).getAmount()
-                  + inflows.get((inflows.size() / 2) - 1).getAmount())
-                  / 2;
+            double middleAmount1 = inflows.get(inflows.size() / 2).getAmount();
+            double middleAmount2 = inflows.get((inflows.size() / 2) - 1).getAmount();
+            return (middleAmount1 + middleAmount2) / 2;
         } else {
             return inflows.get(inflows.size() / 2).getAmount();
         }
@@ -138,9 +136,9 @@ public class FinancialLedger {
                 .sorted((e1, e2) -> (int) (e1.getAmount() - e2.getAmount()))
                 .collect(Collectors.toList());
         if (outflows.size() % 2 == 0) {
-            return (outflows.get(outflows.size() / 2).getAmount()
-                  + outflows.get((outflows.size() / 2) - 1).getAmount())
-                  / 2;
+            double middleAmount1 = outflows.get(outflows.size() / 2).getAmount();
+            double middleAmount2 = outflows.get((outflows.size() / 2) - 1).getAmount();
+            return (middleAmount1 + middleAmount2) / 2;
         } else {
             return outflows.get(outflows.size() / 2).getAmount();
         }

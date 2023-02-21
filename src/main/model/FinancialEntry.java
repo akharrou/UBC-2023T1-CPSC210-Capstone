@@ -9,7 +9,6 @@ import persistence.Writable;
 
 // Represents a financial entry (inflow or outflow) that is to be stored in a financial ledger.
 //   Inflows are by convention interpreted as being non-negative value amounts, and outflows as negative ones.
-// !TODO: double check all is tested
 public abstract class FinancialEntry implements Writable {
 
     protected final int id;

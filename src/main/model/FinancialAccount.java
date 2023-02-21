@@ -58,6 +58,11 @@ public class FinancialAccount implements Writable {
         return this.id;
     }
 
+    // EFFECTS: returns account's creation datetime.
+    public String getCreated() {
+        return this.created;
+    }
+
     // EFFECTS: returns account's owner firstname.
     public String getFirstname() {
         return this.firstname;

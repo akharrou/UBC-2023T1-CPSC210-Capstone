@@ -1,22 +1,70 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFinancialLedger {
 
     FinancialLedger fl;
+    FinancialLedger flFromJson;
+    String ledgerJsonString = "[\n" +
+            "    {\n" +
+            "        \"amount\": 12.23,\n" +
+            "        \"created\": \"2023/02/20 17:26:41\",\n" +
+            "        \"description\": \"sandwish\",\n" +
+            "        \"id\": 1,\n" +
+            "        \"type\": \"inflow\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"amount\": 90.42,\n" +
+            "        \"created\": \"2023/02/20 17:27:51\",\n" +
+            "        \"description\": \"bought bike\",\n" +
+            "        \"id\": 2,\n" +
+            "        \"type\": \"inflow\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"amount\": 5.99,\n" +
+            "        \"created\": \"2023/02/20 17:28:06\",\n" +
+            "        \"description\": \"bus fare\",\n" +
+            "        \"id\": 3,\n" +
+            "        \"type\": \"inflow\"\n" +
+            "    },\n" +
+            "    {\n" +
+            "        \"amount\": 82.23,\n" +
+            "        \"created\": \"2023/02/20 18:07:29\",\n" +
+            "        \"description\": \"bla\",\n" +
+            "        \"id\": 4,\n" +
+            "        \"type\": \"outflow\"\n" +
+            "    }\n" +
+            "]";
 
     @BeforeEach
     public void setup() {
         fl = new FinancialLedger();
+        flFromJson = new FinancialLedger(new JSONArray(ledgerJsonString));
     }
 
     @Test
-    public void testFinancialLedger() {
+    public void testFinancialLedgerBasicConstructor() {
         assertEquals(0, fl.getTotalEntries());
+    }
+
+    @Test
+    public void testFinancialLedgerJsonConstructor() {
+        assertEquals(4, flFromJson.getTotalEntries()); // int
+        assertEquals(3, flFromJson.getTotalInflowEntries()); // long
+        assertEquals("108.64", String.format("%,.2f", flFromJson.getInflowSum())); // double
+        assertEquals("36.21", String.format("%,.2f", flFromJson.getAverageInflow()));
+        assertEquals("12.23", String.format("%,.2f", flFromJson.getMedianInflow()));
+        assertEquals(1, flFromJson.getTotalOutflowEntries()); // long
+        assertEquals("82.23", String.format("%,.2f", flFromJson.getOutflowSum())); // double
+        assertEquals("82.23", String.format("%,.2f", flFromJson.getAverageOutflow())); // double
+        assertEquals("82.23", String.format("%,.2f", flFromJson.getMedianOutflow())); // double
+        assertEquals("26.41", String.format("%,.2f", flFromJson.getNetCashflow())); // double
     }
 
     @Test
@@ -27,26 +75,54 @@ public class TestFinancialLedger {
         assertEquals(1, fl.getTotalEntries());
         assertEquals(1, fl.getTotalInflowEntries());
         assertEquals(0, fl.getTotalOutflowEntries());
+        assertEquals(0, fl.getNetCashflow());
 
         fl.addEntry(1, "entry 2");
         assertEquals(2, fl.getTotalEntries());
         assertEquals(2, fl.getTotalInflowEntries());
         assertEquals(0, fl.getTotalOutflowEntries());
+        assertEquals(1, fl.getNetCashflow());
 
         fl.addEntry(2, "entry 3");
         assertEquals(3, fl.getTotalEntries());
         assertEquals(3, fl.getTotalInflowEntries());
         assertEquals(0, fl.getTotalOutflowEntries());
+        assertEquals(3, fl.getNetCashflow());
 
         fl.addEntry(-1, "entry 4");
         assertEquals(4, fl.getTotalEntries());
         assertEquals(3, fl.getTotalInflowEntries());
         assertEquals(1, fl.getTotalOutflowEntries());
+        assertEquals(2, fl.getNetCashflow());
 
         fl.addEntry(-2, "entry 5");
         assertEquals(5, fl.getTotalEntries());
         assertEquals(3, fl.getTotalInflowEntries());
         assertEquals(2, fl.getTotalOutflowEntries());
+        assertEquals(0, fl.getNetCashflow());
+    }
+
+    @Test
+    public void testDropLedger() {
+        assertEquals(0, fl.getTotalEntries());
+        assertEquals(0, fl.getTotalInflowEntries());
+        assertEquals(0, fl.getTotalOutflowEntries());
+        assertEquals(0, fl.getNetCashflow());
+
+        fl.addEntry(100, "entry 1");
+        fl.addEntry(50, "entry 2");
+        fl.addEntry(-10, "entry 3");
+        fl.addEntry(-30, "entry 4");
+        assertEquals(4, fl.getTotalEntries());
+        assertEquals(2, fl.getTotalInflowEntries());
+        assertEquals(2, fl.getTotalOutflowEntries());
+        assertEquals(110, fl.getNetCashflow());
+
+        fl.drop();
+        assertEquals(0, fl.getTotalEntries());
+        assertEquals(0, fl.getTotalInflowEntries());
+        assertEquals(0, fl.getTotalOutflowEntries());
+        assertEquals(0, fl.getNetCashflow());
     }
 
     @Test
@@ -137,20 +213,35 @@ public class TestFinancialLedger {
     }
 
     @Test
-    public void testConsoleRepr() {
-        fl.addEntry(1, "desc 1");
-        fl.addEntry(-2, "desc 2");
-        fl.addEntry(3, "desc 3");
-        assertNotNull(fl.consoleRepr(2));
-        assertNotEquals("", fl.consoleRepr(2));
+    public void testJsonRepr() {
+        assertNotNull(flFromJson.jsonRepr());
+        assertEquals(ledgerJsonString, flFromJson.jsonRepr().toString(4));
     }
 
     @Test
-    public void testJsonRepr() {
-        fl.addEntry(1, "desc 1");
-        fl.addEntry(-2, "desc 2");
-        fl.addEntry(3, "desc 3");
-        assertNotNull(fl.jsonRepr());
-        assertNotEquals("", fl.jsonRepr());
+    public void testConsoleRepr() {
+        String expected = "\n" +
+                "        Inflows:\n" +
+                "            ID     Created              Description          Amount\n" +
+                "            1      2023/02/20 17:26:41  sandwish             $12.23\n" +
+                "            2      2023/02/20 17:27:51  bought bike          $90.42\n" +
+                "            3      2023/02/20 17:28:06  bus fare             $5.99\n" +
+                "\n" +
+                "            Entries: ....................................... 3\n" +
+                "            Median: ........................................ $12.23\n" +
+                "            Average: ....................................... $36.21\n" +
+                "            Total: ......................................... $108.64\n" +
+                "\n" +
+                "        Outflows:\n" +
+                "            ID     Created              Description          Amount\n" +
+                "            4      2023/02/20 18:07:29  bla                  $82.23\n" +
+                "\n" +
+                "            Entries: ....................................... 1\n" +
+                "            Median: ........................................ $82.23\n" +
+                "            Average: ....................................... $82.23\n" +
+                "            Total: ......................................... $82.23\n";
+
+        assertNotNull(flFromJson.consoleRepr(2));
+        assertEquals(expected, flFromJson.consoleRepr(2));
     }
 }
