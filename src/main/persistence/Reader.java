@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 // Represents a reader that reads data stored in a file.
 public class Reader {
 
-    // REQUIRES: non-null string
     // EFFECTS: reads source file as string and returns it
     //          throws IOException if an I/O error occurs whilst opening the file
     public static String read(String sourcePath) throws IOException {
