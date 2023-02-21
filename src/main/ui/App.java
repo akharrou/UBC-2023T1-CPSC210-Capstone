@@ -51,7 +51,6 @@ public class App {
         this.sleep(250);
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: initializes, runs the user input handling main loop of, and terminates the application.
     public void run() {
@@ -65,7 +64,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: prompts for user sign-up information
     //          ∧ creates financial account based on given information
@@ -92,7 +90,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: prompts for user sign-in information
     //          ∧ (optionally) loads saved financial account corresponding to sign-in info
@@ -122,9 +119,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
-    //           ∧ logged-in ≡ non-null account
-    //           ∧ non-null input file (dataFilepath)
     // MODIFIES: this
     // EFFECTS: resumes application from a previously saved session or launches a fresh session,
     //          according to user input.
@@ -156,7 +150,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: logs out of currently logged-in financial account, either saving the currently
     //          logged-in financial account data in the process or not, according to user input.
@@ -183,7 +176,6 @@ public class App {
         this.account = null;
     }
 
-    // REQUIRES: logged-in ≡ non-null account
     // EFFECTS: saves/writes currently logged-in financial account data to disk file, as JSON.
     //          the financial account can subsequently be loaded back from said [JSON] file.
     private void save() {
@@ -195,7 +187,6 @@ public class App {
         }
     }
 
-    // REQUIRES: input file path (accountFilepath) must be the path to an existing ∧ regular ∧ readable disk file
     // MODIFIES: this
     // EFFECTS: loads previously saved financial account from disk file
     private void load(String accountFilepath) {
@@ -213,8 +204,6 @@ public class App {
         this.keepRunning = false;
     }
 
-    // REQUIRES: non-null & initialized scanner
-    //           ∧ logged-in ≡ non-null account
     // MODIFIES: this
     // EFFECTS: modifies the target cashflow goal of the curently logged-in financial
     //          account to that specified by user input.
@@ -231,8 +220,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
-    //           ∧ logged-in ≡ non-null account
     // MODIFIES: this
     // EFFECTS: resets (drops ledger of) the currently logged-in financial account or aborts (according to user input).
     private void reset() {
@@ -261,8 +248,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
-    //           ∧ logged-in ≡ non-null account
     // EFFECTS: generates and displays to console a summary report of the currently logged-in financial account.
     private void summarize() {
         System.out.print(String.format(
@@ -274,9 +259,6 @@ public class App {
         this.scanner.next();
     }
 
-    // REQUIRES: non-null & initialized scanner
-    //           ∧ non-null lowercased input string
-    //           ∧ logged-in ≡ non-null account
     // MODIFIES: this
     // EFFECTS: processes user input and creates & records a financial inflow or outflow entry to the ledger
     //          of the currently logged-in financial account, according to said processed user input.
@@ -285,7 +267,8 @@ public class App {
     private void processFinancialEntry(String input) {
         while (true) {
             try {
-                System.out.print("\r" + ((input.equals(ADD_INFLOW_COMMAND)) ? "Inflow " : "Outflow ") + "amount: ");
+                System.out.print("\r" + ((input.equalsIgnoreCase(ADD_INFLOW_COMMAND))
+                    ? "Inflow " : "Outflow ") + "amount: ");
                 double amount = Math.abs(Double.parseDouble(this.scanner.next()));
                 System.out.print("Description: ");
                 String description = this.scanner.next();
@@ -303,7 +286,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: processes home-screen user-input
     private void processHomeScreenInput() {
@@ -331,7 +313,6 @@ public class App {
         }
     }
 
-    // REQUIRES: non-null & initialized scanner
     // MODIFIES: this
     // EFFECTS: processes action-screen user-input
     private void processActionScreenInput() {
@@ -339,7 +320,7 @@ public class App {
             String input = this.scanner.next();
             try {
                 if (input.equalsIgnoreCase(ADD_INFLOW_COMMAND) || input.equalsIgnoreCase(ADD_OUTFLOW_COMMAND)) {
-                    this.processFinancialEntry(input.toLowerCase());
+                    this.processFinancialEntry(input);
                 } else if (input.equalsIgnoreCase(GET_SUMMARY_COMMAND)) {
                     this.summarize();
                 } else if (input.equalsIgnoreCase(EDIT_GOAL_COMMAND)) {
@@ -374,7 +355,6 @@ public class App {
         );
     }
 
-    // REQUIRES: logged-in ≡ non-null account
     // EFFECTS: displays action-menu screen
     private void displayActionScreen() {
         System.out.print(String.format(
