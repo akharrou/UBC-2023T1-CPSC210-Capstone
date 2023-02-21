@@ -189,7 +189,7 @@ public class App {
     //          the financial account can subsequently be loaded back from said [JSON] file.
     private void save() {
         try {
-            Writer.write(this.account, DATA_DIR + this.account.getID() + ".json");
+            new Writer().write(this.account, DATA_DIR + this.account.getID() + ".json");
         } catch (FileNotFoundException e) {
             System.err.print(e.getMessage());
             this.sleep(1500);
@@ -201,7 +201,7 @@ public class App {
     // EFFECTS: loads previously saved financial account from disk file
     private void load(String accountFilepath) {
         try {
-            this.account = new FinancialAccount(new JSONObject(Reader.read(accountFilepath)));
+            this.account = new FinancialAccount(new JSONObject(new Reader().read(accountFilepath)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

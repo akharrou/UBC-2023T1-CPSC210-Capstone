@@ -12,7 +12,7 @@ public class Writer {
     //          throws FileNotFoundException if destination file cannot be opened for writing.
     // CITATIONS:
     //  [1]: https://stackoverflow.com/a/2885224/13992057
-    public static void write(Writable object, String destinationPath) throws FileNotFoundException {
+    public void write(Writable object, String destinationPath) throws FileNotFoundException {
         try (PrintWriter pw = new PrintWriter(new File(destinationPath))) {
             pw.print(object.jsonRepr().toString(4));
         }

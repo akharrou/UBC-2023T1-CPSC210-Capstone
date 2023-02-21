@@ -68,7 +68,7 @@ public class WriterTest {
     void testWriterInvalidFile() {
         try {
             FinancialAccount fa = new FinancialAccount("John", "Doe");
-            (new Writer()).write(fa, "./data/my\0illegal:fileName.json");
+            new Writer().write(fa, "./data/my\0illegal:fileName.json");
             fail("IOException was expected");
         } catch (IOException e) {
             // pass
@@ -77,12 +77,14 @@ public class WriterTest {
 
     @Test
     void testWriterEmptyAccount() {
+        Writer writer = new Writer();
+        Reader reader = new Reader();
         try {
 
-            Writer.write(new FinancialAccount(new JSONObject(emptyAccountJsonString)),
+            writer.write(new FinancialAccount(new JSONObject(emptyAccountJsonString)),
                 "./data/test/WriterEmptyAccount.json");
 
-            FinancialAccount fa = new FinancialAccount(new JSONObject(Reader.read(
+            FinancialAccount fa = new FinancialAccount(new JSONObject(reader.read(
                 "./data/test/WriterEmptyAccount.json")));
 
             assertEquals("John", fa.getFirstname());
@@ -98,12 +100,14 @@ public class WriterTest {
 
     @Test
     void testWriterNonEmptyAccount() {
+        Writer writer = new Writer();
+        Reader reader = new Reader();
         try {
 
-            Writer.write(new FinancialAccount(new JSONObject(nonEmptyAccountJsonString)),
+            writer.write(new FinancialAccount(new JSONObject(nonEmptyAccountJsonString)),
                 "./data/test/WriterNonEmptyAccount.json");
 
-            FinancialAccount fa = new FinancialAccount(new JSONObject(Reader.read(
+            FinancialAccount fa = new FinancialAccount(new JSONObject(reader.read(
                 "./data/test/WriterNonEmptyAccount.json")));
 
             assertEquals(UUID.fromString("42e042f4-90b1-4dbc-b11a-2f818a49adf1"), fa.getID());
