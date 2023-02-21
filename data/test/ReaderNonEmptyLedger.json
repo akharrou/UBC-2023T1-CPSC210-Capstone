@@ -1,0 +1,30 @@
+[
+    {
+        "amount": 12.23,
+        "created": "2023/02/20 17:26:41",
+        "description": "sandwish",
+        "id": 1,
+        "type": "inflow"
+    },
+    {
+        "amount": 90.42,
+        "created": "2023/02/20 17:27:51",
+        "description": "bought bike",
+        "id": 2,
+        "type": "inflow"
+    },
+    {
+        "amount": 5.99,
+        "created": "2023/02/20 17:28:06",
+        "description": "bus fare",
+        "id": 3,
+        "type": "inflow"
+    },
+    {
+        "amount": 82.23,
+        "created": "2023/02/20 18:07:29",
+        "description": "bla",
+        "id": 4,
+        "type": "outflow"
+    }
+]

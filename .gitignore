@@ -1,5 +1,4 @@
 *.class
 workspace.xml
 .draft/
-data/
 htmlReport/
