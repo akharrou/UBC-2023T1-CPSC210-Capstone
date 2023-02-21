@@ -17,7 +17,6 @@ import persistence.Reader;
 import persistence.Writer;
 
 // Financial tracker application.
-// !TODO: double check all is tested
 public class App {
 
     private Scanner scanner;

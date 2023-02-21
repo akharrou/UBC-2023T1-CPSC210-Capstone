@@ -10,7 +10,6 @@ import persistence.Writable;
 
 // Represents the financial account of some user. Holds profile information about the user,
 //   and crucially a financial ledger of all of the user's financial inflows and outflows.
-// !TODO: double check all is tested
 public class FinancialAccount implements Writable {
 
     private final UUID id;
@@ -32,7 +31,6 @@ public class FinancialAccount implements Writable {
         this.ledger = new FinancialLedger();
     }
 
-    // REQUIRES: non-null JSONObject
     // EFFECTS: constructs the financial account represented by the given JSON object.
     public FinancialAccount(JSONObject account) {
         this.id = UUID.fromString(account.getString("id"));
@@ -44,7 +42,6 @@ public class FinancialAccount implements Writable {
         this.ledger = new FinancialLedger(account.getJSONArray("ledger"));
     }
 
-    // REQUIRES: non-null financial ledger field
     // MODIFIES: this
     // EFFECTS: creates and adds a new financial entry to this accounts ledger and updates account information.
     //          if no exceptions are thrown, then the operation is considered successful.
@@ -89,7 +86,6 @@ public class FinancialAccount implements Writable {
         this.targetNetCashflow = targetNetCashflow;
     }
 
-    // REQUIRES: non-null financial ledger field
     // MODIFIES: this
     // EFFECTS: resets this financial account (drops ledger entries a updates present net cashflow).
     public void reset() {
@@ -97,7 +93,6 @@ public class FinancialAccount implements Writable {
         this.presentNetCashflow = 0.0;
     }
 
-    // REQUIRES: non-null financial ledger field
     // EFFECTS: returns the console string representation of the summary report of this financial account.
     public String consoleRepr() {
         StringBuilder repr = new StringBuilder();
@@ -130,7 +125,6 @@ public class FinancialAccount implements Writable {
         return repr.toString();
     }
 
-    // REQUIRES: non-null financial ledger field
     // EFFECTS: returns the [writable] JSON object representation of this financial account.
     public JSONObject jsonRepr() {
         return (new JSONObject())
