@@ -18,7 +18,6 @@ public abstract class FinancialEntry implements Writable {
 
     // EFFECTS: constructs a new financial entry with an id, amount and description.
     //          datetime of creation is also stored as metadata.
-    //          the entry is intended to be stored in a financial ledger
     public FinancialEntry(int id, double amount, String description) {
         this.id = id;
         this.amount = Math.abs(amount);
@@ -26,11 +25,7 @@ public abstract class FinancialEntry implements Writable {
         this.created = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss").format(LocalDateTime.now());
     }
 
-    // REQUIRES: non-null JSONObject populated
-    //           ∧ with key-value pairs reflecting financial entry class fields and datatypes
-    //             (id, amount, description, created).
     // EFFECTS: constructs a new financial entry from a JSONObject representation of said entry.
-    //          the entry is intended to be stored in a financial ledger,
     public FinancialEntry(JSONObject entry) {
         this.id = entry.getInt("id");
         this.amount = entry.getDouble("amount");
