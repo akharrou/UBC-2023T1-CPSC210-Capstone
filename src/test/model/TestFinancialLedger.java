@@ -1,7 +1,6 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +9,10 @@ import org.junit.jupiter.api.Test;
 public class TestFinancialLedger {
 
     FinancialLedger fl;
+
+    FinancialLedger flEmptyFromJson;
+    String ledgerEmptyJsonString = "[]";
+
     FinancialLedger flFromJson;
     String ledgerJsonString = "[\n" +
             "    {\n" +
@@ -45,6 +48,7 @@ public class TestFinancialLedger {
     @BeforeEach
     public void setup() {
         fl = new FinancialLedger();
+        flEmptyFromJson = new FinancialLedger(new JSONArray(ledgerEmptyJsonString));
         flFromJson = new FinancialLedger(new JSONArray(ledgerJsonString));
     }
 
@@ -214,13 +218,17 @@ public class TestFinancialLedger {
 
     @Test
     public void testJsonRepr() {
-        assertNotNull(flFromJson.jsonRepr());
+        assertEquals(ledgerEmptyJsonString, flEmptyFromJson.jsonRepr().toString(4));
         assertEquals(ledgerJsonString, flFromJson.jsonRepr().toString(4));
     }
 
     @Test
     public void testConsoleRepr() {
-        String expected = "\n" +
+
+        String expected1 = "\n";
+        assertEquals(expected1, flEmptyFromJson.consoleRepr(2));
+
+        String expected2 = "\n" +
                 "        Inflows:\n" +
                 "            ID     Created              Description          Amount\n" +
                 "            1      2023/02/20 17:26:41  sandwish             $12.23\n" +
@@ -240,8 +248,7 @@ public class TestFinancialLedger {
                 "            Median: ........................................ $82.23\n" +
                 "            Average: ....................................... $82.23\n" +
                 "            Total: ......................................... $82.23\n";
+        assertEquals(expected2, flFromJson.consoleRepr(2));
 
-        assertNotNull(flFromJson.consoleRepr(2));
-        assertEquals(expected, flFromJson.consoleRepr(2));
     }
 }
