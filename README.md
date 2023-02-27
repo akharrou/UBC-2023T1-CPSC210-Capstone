@@ -17,18 +17,20 @@
 
 ## User Stories
 
-- [x] As a user, I want to be able to set and edit a financial goal
-- [x] As a user, I want to be able to ( add | ( list | delete ) all ) financial entries ( to | from | from ) my financial ledger
-    - [x] As a user, I want to be able to ( add | ( list | delete ) all ) one-time inflows
-    - [x] As a user, I want to be able to ( add | ( list | delete ) all ) one-time outflows
-- [x] As a user, I want to be able to get a financial summary report
-- [x] As a user, I want be able to get some statistics about the state of my financial account (number of entries, average, median, totals)
-- [x] As a user, when I logout, I want to be reminded and have the optional ablility to save my account data information and ledger to disk
-- [x] As a user, when I start the application, I want the option to [login and] load my [previously saved] financial account and ledger data information from file.
-- [x] As a user, I want be able to create more than one account, for all of my friends and family
-    - [x] As a user, I want to be able to save the information and ledger of the other accounts I made for my friends and family
-    - [x] As a user, I want to be able to [login and] load any of the [previously] saved financial accounts of my friends and family
+- Phase 01
+    - [x] As a user, I want to be able to set a financial goal.
+    - [x] As a user, I want to be able to edit my financial goal.
+    - [x] As a user, I want to be able to add financial ( inflow | outflow ) entries to my financial ledger.
+    - [x] As a user, I want to be able to delete all financial entries from my financial ledger.
+    - [x] As a user, I want to be able to get a listing of my financial ledger.
+    - [x] As a user, I want to be able to get statistics on my financial account and ledger.
+    - [x] As a user, I want to be able to get a summary and financial standing report on my financial account.
+- Phase 02
+    - [x] As a user, when I logout, I want to be reminded and have the optional ablility to save my account data information and ledger to disk
+    - [x] As a user, when I start the application, I want the option to [login and] load my [previously saved] financial account and ledger data information from file.
+    - [x] As a user, I want be able to create more than one account, for all of my friends and family [and similarly have all the above features]
 
+<!--
 ## Domain Analysis
 
 - [x] What information is changing and what is constant? will need:
