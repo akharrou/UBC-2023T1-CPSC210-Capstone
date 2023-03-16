@@ -17,7 +17,7 @@ import persistence.Reader;
 import persistence.Writer;
 
 // Financial tracker application.
-public class App {
+public class TuiApp {
 
     private Scanner scanner;
     private boolean keepRunning;
@@ -39,7 +39,7 @@ public class App {
     private static final String LOGOUT_COMMAND = "l";
 
     // EFFECTS: constructs, initializes, runs and terminates a new instance of the application.
-    public App() {
+    public TuiApp() {
         this.keepRunning = true;
         this.scanner = (new Scanner(System.in)).useDelimiter("\n");
         try {
