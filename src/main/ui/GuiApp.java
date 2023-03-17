@@ -5,6 +5,7 @@ import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,6 +48,22 @@ public class GuiApp extends JFrame {
         JPanel bpanel = new JPanel();
         JPanel gpanel = new JPanel();
         JLabel label = new JLabel();
+        JButton button = new JButton();
+
+        button.setEnabled(true);
+        button.setBounds(100,250,200,50);
+        button.setText("Get Started");
+        button.setFont(new Font("Roboto", Font.BOLD, 20));
+        button.setHorizontalAlignment(JButton.CENTER);
+        button.setVerticalAlignment(JButton.CENTER);
+        button.setHorizontalTextPosition(JButton.CENTER);
+        button.setVerticalTextPosition(JButton.CENTER);
+        button.setForeground(new Color(0x212121));
+        button.setBackground(new Color(0xFAFAFA));
+        button.setFocusable(false);
+        button.addActionListener(e -> {
+            System.out.println("Button: [Get Started!] was pressed");
+        });
 
         rpanel.setBackground(Color.red);
         rpanel.setBounds(0,0,250,250);
@@ -75,7 +92,8 @@ public class GuiApp extends JFrame {
         this.add(rpanel);
         this.add(bpanel);
         this.add(gpanel);
-        gpanel.add(label);
+        this.add(label, 0);
+        this.add(button, 1);
     }
 
     // REQUIRES: non-negative milliseconds
