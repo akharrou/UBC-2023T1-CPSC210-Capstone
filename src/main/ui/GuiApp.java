@@ -55,6 +55,8 @@ public class GuiApp extends JFrame {
         JPanel panel3 = new JPanel();
         JPanel panel4 = new JPanel();
         JPanel panel5 = new JPanel();
+        JPanel panel5a = new JPanel();
+        JPanel panel5b = new JPanel();
 
         panel1.setBackground(Color.red);
         panel1.setPreferredSize(new Dimension(100, 100));
@@ -65,12 +67,19 @@ public class GuiApp extends JFrame {
         panel4.setBackground(Color.magenta);
         panel4.setPreferredSize(new Dimension(100, 100));
 
-        panel5.setBackground(Color.lightGray);
+        panel5.setBackground(Color.cyan);
         panel5.setPreferredSize(new Dimension(100, 100));
-        panel5.setLayout(new FlowLayout(FlowLayout.LEADING, -5, 10));
-        panel5.add(new JButton("All"));
-        panel5.add(new JButton("Inflows"));
-        panel5.add(new JButton("Outflows"));
+        panel5.setLayout(new BorderLayout(10, 10));
+        panel5a.setBackground(Color.lightGray);
+        panel5a.setPreferredSize(new Dimension(767, 1000));
+        panel5b.setBackground(Color.gray);
+        panel5b.setPreferredSize(new Dimension(767, 1000));
+        panel5.add(panel5a, BorderLayout.WEST);
+        panel5.add(panel5b, BorderLayout.EAST);
+        panel5b.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panel5b.add(new JButton("All"));
+        panel5b.add(new JButton("Inflows"));
+        panel5b.add(new JButton("Outflows"));
 
         this.add(panel1, BorderLayout.NORTH);
         this.add(panel2, BorderLayout.WEST);
