@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-       new GuiApp();
+        new Gui();
+//       new GuiApp();
 
     //     JFrame frame = new JFrame();
     //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
