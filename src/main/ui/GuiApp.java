@@ -1,8 +1,13 @@
 package ui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class GuiApp extends JFrame {
 
@@ -15,8 +20,8 @@ public class GuiApp extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        this.getContentPane().setBackground(new Color(0xFAFAFA));
-        this.setIconImage(new ImageIcon("assets/logo.png").getImage());
+        this.setLayout(null);
+        this.setBackground(new Color(0xFAFAFA));
         this.setTitle("Financial Tracker");
         this.setResizable(true);
         this.setVisible(true);
@@ -32,31 +37,45 @@ public class GuiApp extends JFrame {
     private void run() {
         this.displayHomeScreen();
         while (this.isRunning) {
-            this.sleep(1000);
+            this.sleep(100);
         }
     }
 
     private void displayHomeScreen() {
-//        JLabel labelLogo = new JLabel();
-//        labelLogo.setText(" ");
-//
-//        labelLogo.setHorizontalTextPosition(JLabel.CENTER);
-//        labelLogo.setVerticalTextPosition(JLabel.TOP);
-//        this.add(labelLogo);
 
-        JLabel labelAccountId = new JLabel();
-        labelAccountId.setText("Account ID:");
-        labelAccountId.setFont(new Font("Helvetica", Font.PLAIN, 20));
-//        labelAccountId.setIcon(new ImageIcon("assets/logo.png"));
-        labelAccountId.setHorizontalTextPosition(JLabel.LEFT);
-        labelAccountId.setVerticalTextPosition(JLabel.CENTER);
-        labelAccountId.setVerticalAlignment(JLabel.CENTER);
-        labelAccountId.setHorizontalAlignment(JLabel.LEFT);
-        labelAccountId.setForeground(new Color(0x212121));
-        labelAccountId.setBackground(new Color(0xff0000));
-        labelAccountId.setOpaque(true);
-        this.add(labelAccountId);
-        this.pack();
+        JPanel rpanel = new JPanel();
+        JPanel bpanel = new JPanel();
+        JPanel gpanel = new JPanel();
+        JLabel label = new JLabel();
+
+        rpanel.setBackground(Color.red);
+        rpanel.setBounds(0,0,250,250);
+        rpanel.setLayout(null);
+        bpanel.setBackground(Color.blue);
+        bpanel.setBounds(250,0,250,250);
+        bpanel.setLayout(null);
+        gpanel.setBackground(Color.green);
+        gpanel.setBounds(0,250,500,250);
+        gpanel.setLayout(null);
+
+        label.setText("Financial Tracker");
+        label.setForeground(new Color(0x212121));
+        label.setFont(new Font("Helvetica", Font.PLAIN, 20));
+        label.setIconTextGap(10);
+        label.setIcon(new ImageIcon("assets/cash.gif"));
+        label.setHorizontalTextPosition(JLabel.CENTER);
+        label.setVerticalTextPosition(JLabel.BOTTOM);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setBorder(BorderFactory.createLineBorder(Color.red, 3));
+        label.setBackground(new Color(0xFAFAFA));
+        label.setOpaque(true);
+        label.setBounds(100, 0, 250, 250);
+
+        this.add(rpanel);
+        this.add(bpanel);
+        this.add(gpanel);
+        gpanel.add(label);
     }
 
     // REQUIRES: non-negative milliseconds

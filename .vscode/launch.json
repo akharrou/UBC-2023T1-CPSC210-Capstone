@@ -6,34 +6,10 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Launch Current File",
-      "request": "launch",
-      "mainClass": "${file}"
-    },
-    {
-      "type": "java",
-      "name": "Launch Main",
+      "name": "Launch with Arguments Prompt",
       "request": "launch",
       "mainClass": "ui.Main",
-      "projectName": "project_b3h9o_46fd76b0",
-      "classPaths": [
-        "out/production/Project-Starter",
-        "lib/json-20210307.jar"
-      ]
-    },
-    {
-      "type": "java",
-      "name": "Launch Playground",
-      "request": "launch",
-      "mainClass": "Playground",
-      "projectName": "project_b3h9o_46fd76b0"
-    },
-    {
-      "type": "java",
-      "name": "Launch Main(1)",
-      "request": "launch",
-      "mainClass": "ui.Main",
-      "projectName": "project_b3h9o_46fd76b0"
+      "args": "-classpath out/production/Project-Starter:lib/json-20210307.jar ui.Main"
     }
   ]
 }
