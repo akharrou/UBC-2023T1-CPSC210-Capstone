@@ -1,6 +1,8 @@
 package ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -36,10 +38,43 @@ public class GuiApp extends JFrame {
     }
 
     private void run() {
-        this.displayHomeScreen();
+        this.displayAccountScreen();
+        // this.displayHomeScreen();
         while (this.isRunning) {
             this.sleep(100);
         }
+    }
+
+    private void displayAccountScreen() {
+
+        this.setLayout(new BorderLayout(10,10));
+
+        JPanel panel1 = new JPanel();
+        JPanel panel2 = new JPanel();
+        JPanel panel3 = new JPanel();
+        JPanel panel4 = new JPanel();
+        JPanel panel5 = new JPanel();
+        JPanel panel6 = new JPanel();
+
+        panel1.setBackground(Color.red);
+        panel1.setPreferredSize(new Dimension(100, 100));
+        panel2.setBackground(Color.green);
+        panel2.setPreferredSize(new Dimension(100, 100));
+        panel3.setBackground(Color.blue);
+        panel3.setPreferredSize(new Dimension(100, 100));
+        panel4.setBackground(Color.magenta);
+        panel4.setPreferredSize(new Dimension(100, 100));
+        panel5.setBackground(Color.yellow);
+        panel5.setPreferredSize(new Dimension(100, 100));
+        panel6.setBackground(Color.cyan);
+        panel6.setPreferredSize(new Dimension(100, 100));
+
+        this.add(panel1, BorderLayout.NORTH);
+        this.add(panel2, BorderLayout.WEST);
+        this.add(panel3, BorderLayout.EAST);
+        this.add(panel4, BorderLayout.SOUTH);
+        this.add(panel5, BorderLayout.CENTER);
+        // this.add(panel6);
     }
 
     private void displayHomeScreen() {
@@ -61,16 +96,18 @@ public class GuiApp extends JFrame {
         button.setForeground(new Color(0x212121));
         button.setBackground(new Color(0xFAFAFA));
         button.setFocusable(false);
-        button.addActionListener(e -> {
+        button.addActionListener(event -> {
             System.out.println("Button: [Get Started!] was pressed");
         });
 
         rpanel.setBackground(Color.red);
         rpanel.setBounds(0,0,250,250);
         rpanel.setLayout(null);
+
         bpanel.setBackground(Color.blue);
         bpanel.setBounds(250,0,250,250);
         bpanel.setLayout(null);
+
         gpanel.setBackground(Color.green);
         gpanel.setBounds(0,250,500,250);
         gpanel.setLayout(null);
