@@ -3,6 +3,7 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -27,7 +28,6 @@ public class GuiApp extends JFrame {
         this.setBackground(new Color(0xFAFAFA));
         this.setTitle("Financial Tracker");
         this.setResizable(true);
-        this.setVisible(true);
 
         try {
             this.run();
@@ -41,6 +41,7 @@ public class GuiApp extends JFrame {
         this.displayAccountScreen();
         // this.displayHomeScreen();
         while (this.isRunning) {
+            this.setVisible(true);
             this.sleep(100);
         }
     }
@@ -54,7 +55,6 @@ public class GuiApp extends JFrame {
         JPanel panel3 = new JPanel();
         JPanel panel4 = new JPanel();
         JPanel panel5 = new JPanel();
-        JPanel panel6 = new JPanel();
 
         panel1.setBackground(Color.red);
         panel1.setPreferredSize(new Dimension(100, 100));
@@ -64,17 +64,19 @@ public class GuiApp extends JFrame {
         panel3.setPreferredSize(new Dimension(100, 100));
         panel4.setBackground(Color.magenta);
         panel4.setPreferredSize(new Dimension(100, 100));
-        panel5.setBackground(Color.yellow);
+
+        panel5.setBackground(Color.lightGray);
         panel5.setPreferredSize(new Dimension(100, 100));
-        panel6.setBackground(Color.cyan);
-        panel6.setPreferredSize(new Dimension(100, 100));
+        panel5.setLayout(new FlowLayout(FlowLayout.LEADING, -5, 10));
+        panel5.add(new JButton("All"));
+        panel5.add(new JButton("Inflows"));
+        panel5.add(new JButton("Outflows"));
 
         this.add(panel1, BorderLayout.NORTH);
         this.add(panel2, BorderLayout.WEST);
         this.add(panel3, BorderLayout.EAST);
         this.add(panel4, BorderLayout.SOUTH);
         this.add(panel5, BorderLayout.CENTER);
-        // this.add(panel6);
     }
 
     private void displayHomeScreen() {
