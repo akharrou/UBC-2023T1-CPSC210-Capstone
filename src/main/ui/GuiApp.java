@@ -5,8 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -57,7 +59,11 @@ public class GuiApp extends JFrame {
         JPanel panel5 = new JPanel();
         JPanel panel5a = new JPanel();
         JPanel panel5b = new JPanel();
+        JPanel panel5b1 = new JPanel();
+        JPanel panel5b2 = new JPanel();
+        JPanel panel5b3 = new JPanel();
 
+        // -- sub 0 --
         panel1.setBackground(Color.red);
         panel1.setPreferredSize(new Dimension(100, 100));
         panel2.setBackground(Color.green);
@@ -66,20 +72,33 @@ public class GuiApp extends JFrame {
         panel3.setPreferredSize(new Dimension(100, 100));
         panel4.setBackground(Color.magenta);
         panel4.setPreferredSize(new Dimension(100, 100));
-
         panel5.setBackground(Color.cyan);
         panel5.setPreferredSize(new Dimension(100, 100));
-        panel5.setLayout(new BorderLayout(10, 10));
+
+        // -- sub 5 --
+        panel5.setLayout(new BoxLayout(panel5, BoxLayout.X_AXIS));
         panel5a.setBackground(Color.lightGray);
-        panel5a.setPreferredSize(new Dimension(767, 1000));
         panel5b.setBackground(Color.gray);
-        panel5b.setPreferredSize(new Dimension(767, 1000));
         panel5.add(panel5a, BorderLayout.WEST);
         panel5.add(panel5b, BorderLayout.EAST);
-        panel5b.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        panel5b.add(new JButton("All"));
-        panel5b.add(new JButton("Inflows"));
-        panel5b.add(new JButton("Outflows"));
+
+        // -- sub 5b --
+        panel5b.setLayout(new BoxLayout(panel5b, BoxLayout.Y_AXIS));
+        panel5b1.setBackground(Color.red);
+        panel5b2.setBackground(Color.green);
+        panel5b3.setBackground(Color.blue);
+        panel5b.add(panel5b1);
+        panel5b.add(panel5b2);
+        panel5b.add(panel5b3);
+
+        // -- sub 5b1 --
+        panel5b1.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panel5b1.add(new JButton("All"));
+        panel5b1.add(new JButton("Inflows"));
+        panel5b1.add(new JButton("Outflows"));
+        // -- sub 5b2 --
+        panel5b2.setLayout(new GridLayout(3, 3, 2, 2));
+        // -- sub 5b3 --
 
         this.add(panel1, BorderLayout.NORTH);
         this.add(panel2, BorderLayout.WEST);
