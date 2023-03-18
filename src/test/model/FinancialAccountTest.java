@@ -114,10 +114,10 @@ public class FinancialAccountTest {
 
         assertEquals(0.00, fa.getTargetNetCashflow());
 
-        fa.setTargetNetCashflow(30);
+        fa.setTargetNetCashflow(30.0);
         assertEquals(30.00, fa.getTargetNetCashflow());
 
-        fa.setTargetNetCashflow(-25);
+        fa.setTargetNetCashflow(-25.0);
         assertEquals(-25, fa.getTargetNetCashflow());
 
         fa.setTargetNetCashflow(2.34);

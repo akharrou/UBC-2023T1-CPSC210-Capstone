@@ -58,7 +58,7 @@ public class GuiAppForReal extends JFrame {
         DefaultTableModel model = (DefaultTableModel) ledgerTable.getModel();
         model.setRowCount(0);
         account.getLedger().fetch(null).stream().forEach(elem -> {
-            model.addRow(new Object[] {elem.getID(), elem.getCreated(), elem.getDescription(), elem.getAmount()});
+            model.addRow(new Object[] {elem.getID(), elem.getCreated(), elem.getDescription(), elem.getAmountRepr()});
         });
     }
 

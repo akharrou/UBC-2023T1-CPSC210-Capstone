@@ -11,14 +11,14 @@ import persistence.Writable;
 //   Inflows are by convention interpreted as being non-negative value amounts, and outflows as negative ones.
 public abstract class FinancialEntry implements Writable {
 
-    protected final int id;
-    protected final double amount;
+    protected final Integer id;
+    protected final Double amount;
     protected final String description;
     protected final String created;
 
     // EFFECTS: constructs a new financial entry with an id, amount and description.
     //          datetime of creation is also stored as metadata.
-    public FinancialEntry(int id, double amount, String description) {
+    public FinancialEntry(Integer id, Double amount, String description) {
         this.id = id;
         this.amount = Math.abs(amount);
         this.description = description;
@@ -32,6 +32,10 @@ public abstract class FinancialEntry implements Writable {
         this.description = entry.getString("description");
         this.created = entry.getString("created");
     }
+
+    // EFFECTS: returns [inflow|outflow] entry's string amount representation in dollars,
+    //          with preceding negative sign if outflow and preceding positive sign if inflow.
+    public abstract String getAmountRepr();
 
     // REQUIRES: non-negative ntabs
     // EFFECTS: returns entry's string console representation.
@@ -52,12 +56,12 @@ public abstract class FinancialEntry implements Writable {
     }
 
     // EFFECTS: returns entry's identifier.
-    public int getID() {
+    public Integer getID() {
         return this.id;
     }
 
     // EFFECTS: returns [inflow|outflow] entry's amount.
-    public double getAmount() {
+    public Double getAmount() {
         return this.amount;
     }
 

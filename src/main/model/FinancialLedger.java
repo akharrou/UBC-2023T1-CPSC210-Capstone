@@ -36,7 +36,7 @@ public class FinancialLedger {
     //          Format: QUERY [';' QUERY[...]]
     //          - QUERY: 'type:' ( 'in' | 'out' )
     //               | 'id:' <targetId>
-    //               | 'dt:' <targetDatetime>
+    //               | 'ct:' <targetCreationDatetime>
     //               | 'desc:' <targetDescription>
     //               | 'amt:' <targetAmount>
     //          - <targetId>: \d+
@@ -48,15 +48,16 @@ public class FinancialLedger {
         Integer targetID = null;
         String targetDatetime = null;
         String targetDesc = formattedQuery;
-        Double targetAmount = null;
-        return (List<FinancialEntry>) this.ledger.stream()
-                .filter(elem -> targetType == null || targetType.equals("in")
-                        ? elem instanceof Inflow : elem instanceof Outflow)
+        String targetAmount = null;
+        List<FinancialEntry> res = this.ledger.stream()
+                .filter(elem -> targetType == null
+                        || targetType.equals("in") ? elem instanceof Inflow : elem instanceof Outflow)
                 .filter(elem -> targetID == null || targetID.equals(elem.getID()))
                 .filter(elem -> targetDatetime == null || targetDatetime.equals(elem.getCreated()))
                 .filter(elem -> targetDesc == null || targetDesc.contains(elem.getDescription()))
                 .filter(elem -> targetAmount == null || targetAmount.equals(elem.getAmount()))
                 .collect(Collectors.toList());
+        return res;
     }
 
     // MODIFIES: this

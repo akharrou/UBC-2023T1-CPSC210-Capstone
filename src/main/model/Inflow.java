@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class Inflow extends FinancialEntry {
 
     // EFFECTS: constructs new inflow from given input.
-    public Inflow(int id, double amount, String description) {
+    public Inflow(Integer id, Double amount, String description) {
         super(id, amount, description);
     }
 
@@ -15,4 +15,7 @@ public class Inflow extends FinancialEntry {
         super(entry);
     }
 
+    // EFFECTS: returns [inflow|outflow] entry's string amount representation in dollars,
+    //          with preceding negative sign if outflow and preceding positive sign if inflow.
+    public String getAmountRepr() { return "+ $" + this.amount; }
 }

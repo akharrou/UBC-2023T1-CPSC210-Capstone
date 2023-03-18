@@ -16,8 +16,8 @@ public class FinancialAccount implements Writable {
     private final String created;
     private final String firstname;
     private final String lastname;
-    private double presentNetCashflow;
-    private double targetNetCashflow;
+    private Double presentNetCashflow;
+    private Double targetNetCashflow;
     private FinancialLedger ledger;
 
     // EFFECTS: constructs a new financial account populated with a first and last name.
@@ -45,7 +45,7 @@ public class FinancialAccount implements Writable {
     // MODIFIES: this
     // EFFECTS: creates and adds a new financial entry to this accounts ledger and updates account information.
     //          if no exceptions are thrown, then the operation is considered successful.
-    public void recordFinancialEntry(double amount, String description) {
+    public void recordFinancialEntry(Double amount, String description) {
         this.ledger.addEntry(amount, description);
         this.presentNetCashflow = this.ledger.getNetCashflow();
     }
@@ -76,18 +76,18 @@ public class FinancialAccount implements Writable {
     }
 
     // EFFECTS: returns account's present net cashflow.
-    public double getPresentNetCashflow() {
+    public Double getPresentNetCashflow() {
         return this.presentNetCashflow;
     }
 
     // EFFECTS: returns account's target net cashflow.
-    public double getTargetNetCashflow() {
+    public Double getTargetNetCashflow() {
         return this.targetNetCashflow;
     }
 
     // MODIFIES: this
     // EFFECTS: sets account's target net cashflow.
-    public void setTargetNetCashflow(double targetNetCashflow) {
+    public void setTargetNetCashflow(Double targetNetCashflow) {
         this.targetNetCashflow = targetNetCashflow;
     }
 
@@ -122,7 +122,7 @@ public class FinancialAccount implements Writable {
 
         if (this.presentNetCashflow > this.targetNetCashflow) {
             repr.append("\n  Financial Standing: above target 🟢");
-        } else if (this.presentNetCashflow == this.targetNetCashflow) {
+        } else if (this.presentNetCashflow.equals(this.targetNetCashflow)) {
             repr.append("\n  Financial Standing: on target 🟠");
         } else {
             repr.append("\n  Financial Standing: below target 🔴");
