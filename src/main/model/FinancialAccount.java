@@ -50,6 +50,11 @@ public class FinancialAccount implements Writable {
         this.presentNetCashflow = this.ledger.getNetCashflow();
     }
 
+    // EFFECTS: returns account's financial ledger.
+    public FinancialLedger getLedger() {
+        return this.ledger;
+    }
+
     // EFFECTS: returns account's identifier.
     public UUID getID() {
         return this.id;

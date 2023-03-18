@@ -4,7 +4,28 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        new Gui();
+        new GuiAppForReal();
+//        new Gui();
+        // Jtable; jlabel; filter linked jtable; sets table and only adds positive values;
+
+        // JLabel label = new JLabel();
+        // label.setText("Hello world!");
+        // label.setIcon(new ImageIcon("assets/logo-50x50.png"));
+        // label.setBackground(Color.red);
+        // label.setBounds(0, 0, 250, 250);
+
+        // JFrame frame = new JFrame();
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setSize(1600, 900);
+        // frame.setLayout(null);
+        // frame.setBackground(new Color(0xFAFAFA));
+        // frame.setTitle("App !");
+        // frame.setResizable(false);
+        // frame.setVisible(true);
+        // frame.add(label);
+        // frame.repaint();
+        // frame.setVisible(true);
+
 //       new GuiApp();
 
     //     JFrame frame = new JFrame();

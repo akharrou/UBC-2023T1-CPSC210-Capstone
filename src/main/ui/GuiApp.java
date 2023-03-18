@@ -29,7 +29,7 @@ public class GuiApp extends JFrame {
         this.setLayout(null);
         this.setBackground(new Color(0xFAFAFA));
         this.setTitle("Financial Tracker");
-        this.setResizable(true);
+        this.setResizable(false);
 
         try {
             this.run();
@@ -40,9 +40,10 @@ public class GuiApp extends JFrame {
     }
 
     private void run() {
-        this.displayAccountScreen();
-        // this.displayHomeScreen();
+        // this.displayAccountScreen();
+        this.displayHomeScreen();
         while (this.isRunning) {
+            this.repaint();
             this.setVisible(true);
             this.sleep(100);
         }
