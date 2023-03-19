@@ -1,131 +1,87 @@
 package ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import model.FinancialAccount;
+import model.InvalidInputException;
+import org.json.JSONObject;
+import persistence.Reader;
+import persistence.Writer;
+import ui.LaunchScreen;
+
+import javax.swing.*;
 
 public class Main {
+
+    protected static final Integer MIN_FRAME_WIDTH = 550;
+    protected static final Integer MIN_FRAME_HEIGHT = 600;
+    protected static final String DATA_DIR = "./data/";
+
+    protected static LaunchScreen launchScreen;
+    protected static LoginScreen loginScreen;
+    protected static AccountScreen accountScreen;
+
+    protected static FinancialAccount account;
+
     public static void main(String[] args) throws IOException {
-        new GuiAppForReal();
-//        new Gui();
-        // Jtable; jlabel; filter linked jtable; sets table and only adds positive values;
+        Main.launchScreen = new LaunchScreen();
+    }
 
-        // JLabel label = new JLabel();
-        // label.setText("Hello world!");
-        // label.setIcon(new ImageIcon("assets/logo-50x50.png"));
-        // label.setBackground(Color.red);
-        // label.setBounds(0, 0, 250, 250);
+    // MODIFIES: this
+    // EFFECTS: prompts for user sign-in information
+    //          ∧ (optionally) loads saved financial account corresponding to sign-in info
+    protected static void login(String accountID) {
+        List<File> dirListing = Arrays.asList((new File(DATA_DIR)).listFiles(File::canRead));
+        String dataFilepath = dirListing.stream().map(File::getName)
+                .filter(pathname -> pathname.startsWith(accountID))
+                .findFirst().orElse(null);
+        if (dataFilepath == null) {
+            System.out.print("\nAccount not found. You can register or try again.");
+        } else {
+            try {
+                Main.account = new FinancialAccount(new JSONObject(Reader.read(DATA_DIR + dataFilepath)));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-        // JFrame frame = new JFrame();
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setSize(1600, 900);
-        // frame.setLayout(null);
-        // frame.setBackground(new Color(0xFAFAFA));
-        // frame.setTitle("App !");
-        // frame.setResizable(false);
-        // frame.setVisible(true);
-        // frame.add(label);
-        // frame.repaint();
-        // frame.setVisible(true);
+    // MODIFIES: this
+    // EFFECTS: prompts for user sign-up information
+    //          ∧ creates financial account based on given information
+    protected static void register(String firstname, String lastname, Double netTargetCashflow) {
+        Main.account = new FinancialAccount(firstname, lastname);
+        Main.editGoal(netTargetCashflow);
+    }
 
-//       new GuiApp();
+    // MODIFIES: this
+    // EFFECTS: loads previously saved financial account from disk file
+    protected static void load(String accountFilepath) {
+        try {
+            Main.account = new FinancialAccount(new JSONObject(Reader.read(accountFilepath)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    //     JFrame frame = new JFrame();
-    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     frame.setSize(1600, 900);
-    //     frame.setLayout(null);
-    //     frame.setBackground(new Color(0xFAFAFA));
-    //     frame.setTitle("Financial Tracker");
-    //    frame.setResizable(false);
-    //     frame.setVisible(true);
+    // EFFECTS: saves/writes currently logged-in financial account data to disk file, as JSON.
+    //          the financial account can subsequently be loaded back from said [JSON] file.
+    protected static void save() {
+        try {
+            Writer.write(Main.account, DATA_DIR + Main.account.getID() + ".json");
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    //     JLabel label = new JLabel();
-    //     label.setText("Hello world!");
-    //     // label.setIcon(new ImageIcon("assets/logo-50x50.png"));
-    //     label.setBackground(Color.red);
-    //     label.setBounds(0,0,250,250);
-
-    //     frame.add(label);
-
-
-//        JPanel rpanel = new JPanel();
-//        JPanel bpanel = new JPanel();
-//        JPanel gpanel = new JPanel();
-//        JLabel label = new JLabel();
-//
-//        rpanel.setLayout(null);
-//        rpanel.setBackground(Color.red);
-//        rpanel.setBounds(0,0,250,250);
-//
-//        bpanel.setLayout(null);
-//        bpanel.setBackground(Color.blue);
-//        bpanel.setBounds(250,0,250,250);
-//
-//        gpanel.setLayout(null);
-//        gpanel.setBackground(Color.green);
-//        gpanel.setBounds(0,250,500,250);
-//
-//        label.setLayout(null);
-//        label.setText("Financial Tracker");
-//        label.setIcon(new ImageIcon("assets/cash.gif"));
-//        label.setForeground(new Color(0x212121));
-//        label.setFont(new Font("Helvetica", Font.PLAIN, 20));
-//        label.setBounds(250, 250, 500, 500);
-//        label.setIconTextGap(10);
-//        label.setHorizontalTextPosition(JLabel.CENTER);
-//        label.setVerticalTextPosition(JLabel.BOTTOM);
-//        label.setHorizontalAlignment(JLabel.CENTER);
-//        label.setVerticalAlignment(JLabel.CENTER);
-//        label.setBorder(BorderFactory.createLineBorder(Color.red, 3));
-//        label.setBackground(new Color(0xFAFAFA));
-//        label.setOpaque(true);
-
-//        frame.add(rpanel);
-//        frame.add(bpanel);
-//        frame.add(gpanel);
-//        frame.add(label, 0);
-
-//        this.add(rpanel);
-//        this.add(bpanel);
-//        this.add(gpanel);
-//        gpanel.add(label);
-//        this.setVisible(true);
-
-
-
-//        JFrame frame = new JFrame();
-
-//        JPanel bpanel = new JPanel();
-//
-//        panel.setBackground(Color.red);
-//        panel.setBounds(0,0,250,250);
-//
-//        bpanel.setBackground(Color.blue);
-//        bpanel.setBounds(0,250,500,250);
-
-//        JPanel gpanel = new JPanel();
-//        panel.setBackground(Color.green);
-//        panel.setBounds(900,0,250,250);
-
-        // JLabel label = new JLabel();
-        // label.setFont(new Font("Helvetica", Font.PLAIN, 20));
-        // label.setForeground(new Color(0x212121));
-        // label.setBounds(190,270, 200,50);
-
-//        frame.add(panel);
-//        frame.add(bpanel);
-//        frame.setVisible(true);
-//
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setLayout(null);
-//        frame.setSize(750, 750);
-        // frame.setBackground(new Color(0xFAFAFA));
-        // frame.setTitle("Financial Tracker");
-
-        // frame.add(gpanel);
-        // label.setText("component count: " + frame.getRootPane().getComponentCount());
-        // frame.add(label);
-
-        // frame.setResizable(true);
-        // frame.setIconImage(new ImageIcon("assets/logo.png").getImage());
-
+    // MODIFIES: this
+    // EFFECTS: modifies the target cashflow goal of the curently logged-in financial
+    //          account to that specified by user input.
+    protected static void editGoal(Double newTargetNetCashflow) {
+        Main.account.setTargetNetCashflow(newTargetNetCashflow);
     }
 }

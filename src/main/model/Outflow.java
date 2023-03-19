@@ -17,5 +17,5 @@ public class Outflow extends FinancialEntry {
 
     // EFFECTS: returns [inflow|outflow] entry's string amount representation in dollars,
     //          with preceding negative sign if outflow and preceding positive sign if inflow.
-    public String getAmountRepr() { return "– $" + this.amount; }
+    public String getAmountRepr() { return String.format("– $%,.2f", this.amount); }
 }

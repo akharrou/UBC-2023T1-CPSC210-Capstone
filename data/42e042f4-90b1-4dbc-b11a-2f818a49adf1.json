@@ -1,9 +1,9 @@
 {
     "ledger": [
         {
-            "amount": 12.23,
+            "amount": 5400,
             "created": "2023/02/20 17:26:41",
-            "description": "sandwish",
+            "description": "salary",
             "id": 1,
             "type": "inflow"
         },
@@ -12,19 +12,19 @@
             "created": "2023/02/20 17:27:51",
             "description": "bought bike",
             "id": 2,
-            "type": "inflow"
+            "type": "outflow"
         },
         {
             "amount": 5.99,
             "created": "2023/02/20 17:28:06",
-            "description": "bus fare",
+            "description": "bought bus fare",
             "id": 3,
-            "type": "inflow"
+            "type": "outflow"
         },
         {
             "amount": 82.23,
             "created": "2023/02/20 18:07:29",
-            "description": "bla",
+            "description": "bought sandles",
             "id": 4,
             "type": "outflow"
         }

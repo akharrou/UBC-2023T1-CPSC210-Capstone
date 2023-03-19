@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -51,8 +52,8 @@ public class FinancialAccount implements Writable {
     }
 
     // EFFECTS: returns account's financial ledger.
-    public FinancialLedger getLedger() {
-        return this.ledger;
+    public List<FinancialEntry> getLedger() {
+        return this.ledger.getLedger();
     }
 
     // EFFECTS: returns account's identifier.
@@ -77,7 +78,7 @@ public class FinancialAccount implements Writable {
 
     // EFFECTS: returns account's present net cashflow.
     public Double getPresentNetCashflow() {
-        return this.presentNetCashflow;
+        return this.ledger.getNetCashflow();
     }
 
     // EFFECTS: returns account's target net cashflow.

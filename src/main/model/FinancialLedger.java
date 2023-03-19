@@ -32,32 +32,9 @@ public class FinancialLedger {
                 .collect(Collectors.toList());
     }
 
-    // EFFECTS: returns list of financial entries based on provided formatted query string.
-    //          Format: QUERY [';' QUERY[...]]
-    //          - QUERY: 'type:' ( 'in' | 'out' )
-    //               | 'id:' <targetId>
-    //               | 'ct:' <targetCreationDatetime>
-    //               | 'desc:' <targetDescription>
-    //               | 'amt:' <targetAmount>
-    //          - <targetId>: \d+
-    //          - <targetDatetime>: yyyy/MM/dd HH:mm:ss
-    //          - <targetDescription>: [\w\s]+
-    //          - <targetAmount>: \d+(\.\d+)?
-    public List<FinancialEntry> fetch(String formattedQuery) {
-        String targetType = null;
-        Integer targetID = null;
-        String targetDatetime = null;
-        String targetDesc = formattedQuery;
-        String targetAmount = null;
-        List<FinancialEntry> res = this.ledger.stream()
-                .filter(elem -> targetType == null
-                        || targetType.equals("in") ? elem instanceof Inflow : elem instanceof Outflow)
-                .filter(elem -> targetID == null || targetID.equals(elem.getID()))
-                .filter(elem -> targetDatetime == null || targetDatetime.equals(elem.getCreated()))
-                .filter(elem -> targetDesc == null || targetDesc.contains(elem.getDescription()))
-                .filter(elem -> targetAmount == null || targetAmount.equals(elem.getAmount()))
-                .collect(Collectors.toList());
-        return res;
+    // EFFECTS: returns ledger.
+    public List<FinancialEntry> getLedger() {
+        return this.ledger;
     }
 
     // MODIFIES: this
