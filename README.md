@@ -30,6 +30,22 @@
     - [x] As a user, when I start the application, I want the option to [login and] load my [previously saved] financial account and ledger data information from file.
     - [x] As a user, I want be able to create more than one account, for all of my friends and family [and similarly have all the above features]
 
+## Instructions for Grader
+
+- You can generate the first required action (adding Xs to Ys) by:
+    1. launching the application
+    1. registering
+    1. clicking "Add"
+    1. filling in the popup dialog form
+    1. clicking "Ok"
+- You can generate the second required action (filtering & sorting) by doing one of:
+    - typing a search query; filters on description field with given query
+    - selecting one of the available drop down menu items; filters by entry type ( all | inflow | outflow )
+    - clicking one of the table headers; sorts by clicked header field
+- You can locate my visual component by starting the app; it's on the launch screen.
+- You can save the state of my application by [from the account screen] clicking "logout" or closing the window, and then clicking "yes" to the save popup.
+- You can reload the state of my application by [from the login/register screen] loggining in
+
 <!--
 ## Domain Analysis
 
