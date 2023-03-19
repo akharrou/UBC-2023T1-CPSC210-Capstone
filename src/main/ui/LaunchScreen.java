@@ -1,12 +1,18 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
+import static ui.GuiApp.MIN_FRAME_HEIGHT;
+import static ui.GuiApp.MIN_FRAME_WIDTH;
 
-import static java.lang.Thread.sleep;
-import static ui.Main.MIN_FRAME_HEIGHT;
-import static ui.Main.MIN_FRAME_WIDTH;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+// Represents the GUI application's launch screen.
 public class LaunchScreen extends JFrame {
 
     private static final int iconXCoord = (int) (MIN_FRAME_WIDTH * 0.5) - 100;
@@ -17,6 +23,7 @@ public class LaunchScreen extends JFrame {
     JLabel launchLabel = new JLabel();
     JButton launchButton = new JButton();
 
+    // EFFECTS: constructs and displays the application's launch screen.
     public LaunchScreen() {
         super("Fintrac");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,12 +32,14 @@ public class LaunchScreen extends JFrame {
         this.setPreferredSize(new Dimension(MIN_FRAME_WIDTH, MIN_FRAME_HEIGHT));
         this.setResizable(false);
         this.setLayout(null);
-        this.setupCustom();
+        this.createUIComponents();
         this.setVisible(true);
         this.pack();
     }
 
-    private void setupCustom() {
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
+    private void createUIComponents() {
 
         launchLabel.setText("Fintrac");
         launchLabel.setFont(new Font("Hoefler Text", Font.PLAIN, 40));
@@ -51,10 +60,9 @@ public class LaunchScreen extends JFrame {
         launchButton.addActionListener(e -> {
             // CITE: <https://www.youtube.com/watch?v=voykZF3Y5WY>
             this.setVisible(false);
-            Main.loginScreen = new LoginScreen();
+            GuiApp.loginScreen = new LoginScreen();
             this.dispose();
         });
         this.add(launchButton);
-
     }
 }

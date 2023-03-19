@@ -6,6 +6,9 @@ import org.json.JSONArray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class FinancialLedgerTest {
 
     FinancialLedger fl;
@@ -55,6 +58,7 @@ public class FinancialLedgerTest {
     @Test
     public void testFinancialLedgerBasicConstructor() {
         assertEquals(0, fl.getTotalEntries());
+        assertEquals(new ArrayList<FinancialEntry>(), fl.getLedger());
     }
 
     @Test

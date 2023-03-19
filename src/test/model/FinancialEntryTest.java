@@ -102,6 +102,13 @@ public class FinancialEntryTest {
         );
     }
 
+    // () -> String
+    @Test
+    public void testFancyAmountConsoleRepr() {
+        assertEquals("+ $23.72", fi2.getAmountRepr());
+        assertEquals("– $32.27", fo2.getAmountRepr());
+    }
+
     // () -> JSONObject
     @Test
     public void testJsonRepr() {

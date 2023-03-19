@@ -80,7 +80,7 @@
                               <title-color color="-16777216"/>
                             </border>
                             <children>
-                              <component id="eb158" class="javax.swing.JTextArea" binding="firstNameTextField">
+                              <component id="e4cb8" class="javax.swing.JTextField" binding="firstNameTextField">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
                                     <minimum-size width="100" height="20"/>
@@ -90,8 +90,6 @@
                                 <properties>
                                   <editable value="true"/>
                                   <font/>
-                                  <rows value="0"/>
-                                  <wrapStyleWord value="false"/>
                                 </properties>
                               </component>
                               <vspacer id="3689e">
@@ -112,7 +110,7 @@
                               <title-color color="-16777216"/>
                             </border>
                             <children>
-                              <component id="e921f" class="javax.swing.JTextArea" binding="lastNameTextField">
+                              <component id="9fa35" class="javax.swing.JTextField" binding="lastNameTextField">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
                                     <minimum-size width="100" height="20"/>
@@ -121,8 +119,6 @@
                                 </constraints>
                                 <properties>
                                   <font/>
-                                  <rows value="0"/>
-                                  <wrapStyleWord value="false"/>
                                 </properties>
                               </component>
                               <vspacer id="a8be0">
@@ -143,7 +139,7 @@
                               <title-color color="-16777216"/>
                             </border>
                             <children>
-                              <component id="641c8" class="javax.swing.JTextArea" binding="tncTextField">
+                              <component id="506aa" class="javax.swing.JTextField" binding="tncTextField">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
                                     <minimum-size width="100" height="20"/>
@@ -152,8 +148,6 @@
                                 </constraints>
                                 <properties>
                                   <font/>
-                                  <rows value="0"/>
-                                  <wrapStyleWord value="false"/>
                                 </properties>
                               </component>
                               <vspacer id="a5015">
@@ -263,7 +257,7 @@
                               <title-color color="-16777216"/>
                             </border>
                             <children>
-                              <component id="aacb5" class="javax.swing.JTextArea" binding="accountIdTextField">
+                              <component id="3055e" class="javax.swing.JTextField" binding="accountIdTextField">
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false">
                                     <minimum-size width="100" height="20"/>
@@ -272,8 +266,6 @@
                                 </constraints>
                                 <properties>
                                   <font/>
-                                  <rows value="0"/>
-                                  <wrapStyleWord value="false"/>
                                 </properties>
                               </component>
                               <vspacer id="ea688">

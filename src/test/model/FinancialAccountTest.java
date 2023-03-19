@@ -2,6 +2,7 @@ package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -74,6 +75,7 @@ public class FinancialAccountTest {
         assertEquals("Doe", fa.getLastname());
         assertEquals(0.0, fa.getPresentNetCashflow());
         assertEquals(0.0, fa.getTargetNetCashflow());
+        assertEquals(new ArrayList<FinancialEntry>(), fa.getLedger());
     }
 
     @Test

@@ -4,13 +4,8 @@ import model.InvalidInputException;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
-import static ui.Main.*;
+import static ui.GuiApp.*;
 
 public class LoginScreen extends JFrame {
 
@@ -24,9 +19,9 @@ public class LoginScreen extends JFrame {
     private JPanel registerPanel;
     private JPanel loginPanel;
     private JPanel loginSubPanel;
-    private JTextArea accountIdTextField;
-    private JTextArea firstNameTextField;
-    private JTextArea lastNameTextField;
+    private JTextField accountIdTextField;
+    private JTextField firstNameTextField;
+    private JTextField lastNameTextField;
     private JPanel accountIdPanel;
     private JPanel accountIdSubPanel;
     private JPanel registerFormPanel;
@@ -38,7 +33,7 @@ public class LoginScreen extends JFrame {
     private JPanel registerSubPanel;
     private JButton loginButton;
     private JPanel tncPanel;
-    private JTextArea tncTextField;
+    private JTextField tncTextField;
     private JPanel footerSubPanel;
 
     public LoginScreen() {
@@ -56,20 +51,28 @@ public class LoginScreen extends JFrame {
 
     private void createUIComponents() {
         registerButton.addActionListener(event -> {
-            Main.register(
-                    this.firstNameTextField.getText(),
-                    this.lastNameTextField.getText(),
-                    Double.parseDouble(this.tncTextField.getText())
-            );
-            this.setVisible(false);
-            Main.accountScreen = new AccountScreen();
-            dispose();
+            try {
+                GuiApp.register(
+                        this.firstNameTextField.getText(),
+                        this.lastNameTextField.getText(),
+                        this.tncTextField.getText()
+                );
+                this.setVisible(false);
+                GuiApp.accountScreen = new AccountScreen();
+                dispose();
+            } catch (InvalidInputException e) {
+                // pass; already handled
+            }
         });
         loginButton.addActionListener(event -> {
-            Main.login(this.accountIdTextField.getText());
-            this.setVisible(false);
-            Main.accountScreen = new AccountScreen();
-            this.dispose();
+            try {
+                GuiApp.login(this.accountIdTextField.getText());
+                this.setVisible(false);
+                GuiApp.accountScreen = new AccountScreen();
+                this.dispose();
+            } catch (InvalidInputException e) {
+                // pass; already handled
+            }
         });
     }
 }

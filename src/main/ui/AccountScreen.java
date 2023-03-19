@@ -1,30 +1,19 @@
 package ui;
 
+import model.InvalidInputException;
+
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import org.json.JSONObject;
-
-import model.FinancialAccount;
-import model.InvalidInputException;
-import persistence.Reader;
-
 import static java.lang.Thread.sleep;
-import static ui.Main.*;
+import static ui.GuiApp.*;
 
 public class AccountScreen extends JFrame {
 
@@ -56,6 +45,9 @@ public class AccountScreen extends JFrame {
     private JPanel footerSubPanel;
     private JButton editTncButton;
     private JPanel editTncPanel;
+    private JComboBox dropDownComboBox;
+    private JPanel dropDownPanel;
+    private JPanel addEntryButtonPanel;
 
     public AccountScreen() {
         super("Fintrac");
@@ -68,6 +60,7 @@ public class AccountScreen extends JFrame {
         this.pack();
         this.setVisible(true);
         this.updateScreen();
+        this.getContentPane().requestFocus();  // CITE: <https://stackoverflow.com/a/58008050>
     }
 
     public void updateScreen() {
@@ -77,31 +70,31 @@ public class AccountScreen extends JFrame {
     }
 
     private void updateHeader() {
-        this.accountNameLabel.setText(Main.account.getFirstname() + " " + Main.account.getLastname());
-        this.accountIdLabel.setText(Main.account.getID().toString().substring(0,7));
+        this.accountNameLabel.setText(GuiApp.account.getFirstname() + " " + GuiApp.account.getLastname());
+        this.accountIdLabel.setText(GuiApp.account.getID().toString().substring(0,7));
     }
 
     private void updateBody() {
         // CITE: <https://www.youtube.com/watch?v=teSBvFy9NH8>
         DefaultTableModel model = (DefaultTableModel) ledgerTable.getModel();
         model.setRowCount(0);
-        Main.account.getLedger().stream().forEach(elem -> {
+        GuiApp.account.getLedger().stream().forEach(elem -> {
             model.addRow(new Object[] {elem.getID(), elem.getCreated(), elem.getDescription(), elem.getAmountRepr()});
         });
-        searchButton.doClick();
+        searchButtonDoClick();
     }
 
     private void updateFooter() {
         String pnc = String.format("Present Net Cashflow: %s $%,.2f",
-                Main.account.getPresentNetCashflow() >= 0 ? "" : "–",
-                Main.account.getPresentNetCashflow()
+                GuiApp.account.getPresentNetCashflow() >= 0 ? "" : "–",
+                GuiApp.account.getPresentNetCashflow()
         );
         String tnc = String.format("Target Net Cashflow: %s $%,.2f",
-                Main.account.getTargetNetCashflow() >= 0 ? "" : "–",
-                Main.account.getTargetNetCashflow()
+                GuiApp.account.getTargetNetCashflow() >= 0 ? "" : "–",
+                GuiApp.account.getTargetNetCashflow()
         );
         String fs = String.format("Financial Standing: %s",
-                Main.account.getPresentNetCashflow() > Main.account.getTargetNetCashflow() ? "Good" : "Bad"
+                GuiApp.account.getPresentNetCashflow() > GuiApp.account.getTargetNetCashflow() ? "Good" : "Bad"
         );
         this.pncLabel.setText(pnc);
         this.tncLabel.setText(tnc);
@@ -109,7 +102,7 @@ public class AccountScreen extends JFrame {
     }
 
     private void createUIComponents() {
-        createUITable();
+        setupTable();
         setupActions();
         setupWindow();
     }
@@ -117,9 +110,9 @@ public class AccountScreen extends JFrame {
     private void setupWindow() {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                int response = JOptionPane.showConfirmDialog(null, "Save session?", "Title", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Save session?", "Save", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
-                    Main.save();
+                    GuiApp.save();
                 }
                 dispose();
             }
@@ -127,38 +120,47 @@ public class AccountScreen extends JFrame {
     }
 
     private void setupActions() {
-        addEntryButton.addActionListener(event -> {
-            new EntryDialog();
-        });
+        addEntryButton.addActionListener(e -> new EntryDialog());
         editTncButton.addActionListener(e -> {
-            String newTncAmt = JOptionPane.showInputDialog("New Target Cashflow:");
-            Main.editGoal(Double.parseDouble(newTncAmt));
-            Main.accountScreen.updateScreen();
+            try {
+                GuiApp.editGoal(JOptionPane.showInputDialog("New Target Cashflow:"));
+                GuiApp.accountScreen.updateScreen();
+            } catch (InvalidInputException exc) {
+                // pass; already handled
+            }
         });
         resetTableButton.addActionListener(event -> {
-            Main.account.getLedger().clear();
-            Main.accountScreen.updateScreen();
+            GuiApp.account.getLedger().clear();
+            GuiApp.accountScreen.updateScreen();
         });
         logoutButton.addActionListener(event -> {
             int response = JOptionPane.showConfirmDialog(null, "Save session?", "Title", JOptionPane.YES_NO_OPTION);
             if (response == JOptionPane.YES_OPTION) {
-                Main.save();
+                GuiApp.save();
             }
-            Main.account = null;
+            GuiApp.account = null;
             this.setVisible(false);
-            Main.loginScreen = new LoginScreen();
+            GuiApp.loginScreen = new LoginScreen();
             this.dispose();
         });
+        dropDownComboBox.addItemListener(e -> searchButtonDoClick());  // CITE: https://youtu.be/teSBvFy9NH8?t=1511
     }
 
-    private void createUITable() {
+    private void setupButtons() {
 
+    }
+
+    private void setupTable() {
         // CITE: <https://www.youtube.com/watch?v=3m1j3PiUeVI>
         ledgerTable.setModel(new DefaultTableModel(null, new String[] {"ID", "Created", "Description", "Amount"}));
-
         ledgerTable.getTableHeader().setFont(new Font("Roboto", Font.PLAIN, 12));
         ledgerTable.setRowHeight(20);
+        this.setupTableRenderer();
+        this.setupTableSorter();
+        this.setupTableSearcher();
+    }
 
+    private void setupTableRenderer() {
         DefaultTableCellRenderer cellLeftRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer cellCenterRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer cellRightRenderer = new DefaultTableCellRenderer();
@@ -166,7 +168,6 @@ public class AccountScreen extends JFrame {
         cellCenterRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         cellRightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        // CITE: stackoverflow
         ledgerTable.getTableHeader().getColumnModel().getColumn(0).setHeaderRenderer(cellCenterRenderer);
         ledgerTable.getTableHeader().getColumnModel().getColumn(1).setHeaderRenderer(cellLeftRenderer);
         ledgerTable.getTableHeader().getColumnModel().getColumn(2).setHeaderRenderer(cellLeftRenderer);
@@ -182,8 +183,10 @@ public class AccountScreen extends JFrame {
         ledgerTable.getColumnModel().getColumn(2).setCellRenderer(cellLeftRenderer);
         ledgerTable.getColumnModel().getColumn(3).setMinWidth(80);
         ledgerTable.getColumnModel().getColumn(3).setCellRenderer(cellRightRenderer);
+    }
 
-        // CITE: <https://stackoverflow.com/q/39864139>
+    // CITE: <https://stackoverflow.com/q/39864139>
+    private void setupTableSorter() {
         trs = new TableRowSorter(ledgerTable.getModel());
         trs.setComparator(0, (x, y) -> ((Integer) x).compareTo((Integer) y));
         trs.setComparator(1, (x, y) -> ((String) x).compareTo((String) y));
@@ -196,46 +199,67 @@ public class AccountScreen extends JFrame {
         ledgerTable.setRowSorter(trs);
         ledgerTable.setAutoCreateRowSorter(false);
 
-        searchButton.addActionListener(event -> {
-            trs.setRowFilter(new RowFilter() {
-                // EFFECTS: returns true if row is to be displayed, false otherwise.
-                //          each 'Entry' represents a row from the table.
-                //          Format: QUERY [';' QUERY[...]]
-                //          - QUERY: 'type:' ( 'in' ['flow'] | 'out' ['flow'] )
-                //               | 'id:' <targetId>
-                //               | 'ct:' <targetCreationDatetime>
-                //               | 'desc:' <targetDescription>
-                //               | 'amt:' <targetAmount>
-                //          - <targetId>: \d+
-                //          - <targetDatetime>: yyyy/MM/dd HH:mm:ss
-                //          - <targetDescription>: (\w\s?)*
-                //          - <targetAmount>: \d+(\.\d+)?
-                // CITE: <https://youtu.be/U5Sh0KDLXSc?t=285>
-                //       <https://stackoverflow.com/a/4662265/13992057>
-                @Override
-                public boolean include(Entry entry) {
-                    String query = searchTextField.getText();
-                    String targetType = Pattern.compile("type:(in(flow)?|out(flow)?)")
-                            .matcher(query).results().map(res -> res.group(1)).findFirst().orElse(null);
-                    String targetID = Pattern.compile("id:(\\d+)")
-                            .matcher(query).results().map(res -> res.group(1)).findFirst().orElse(null);
-                    String targetCreated = Pattern.compile("ct:(\\d\\d\\d\\d/\\d\\d/\\d\\d \\d\\d:\\d\\d:\\d\\d)")
-                            .matcher(query).results().map(res -> res.group(1)).findFirst().orElse(null);
-                    String targetDesc = Pattern.compile("desc:((?:\\w*\\s*)*)")
-                            .matcher(query).results().map(res -> res.group(1)).findFirst().orElse(null);
-                    String targetAmount = Pattern.compile("amt:(\\d+(?:\\.\\d+)?)")
-                            .matcher(query).results().map(res -> res.group(1)).findFirst().orElse(null);
-                    return (targetID == null || entry.getStringValue(0).equals(targetID))
-                            && (targetCreated == null || entry.getStringValue(1).contains(targetCreated))
-                            && (targetDesc == null || entry.getStringValue(2).contains(targetDesc))
-                            && (targetAmount == null || entry.getStringValue(3).contains(targetAmount))
-                            && (targetType == null
-                            || (targetType.startsWith("in")
-                            && entry.getStringValue(3).startsWith("+"))
-                            || (targetType.startsWith("out")
-                            && entry.getStringValue(3).startsWith("–")));
+    }
+
+    // CITE: <https://stackoverflow.com/a/40516250>
+    private void setupTableSearcher() {
+        searchTextField.setText("Search\u200B");
+        searchTextField.setForeground(Color.GRAY);
+        searchTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (searchTextField.getText().equals("Search\u200B")) {
+                    searchTextField.setText("");
+                    searchTextField.setForeground(Color.BLACK);
                 }
-            });
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (searchTextField.getText().isEmpty()) {
+                    searchTextField.setForeground(Color.GRAY);
+                    searchTextField.setText("Search\u200B");
+                }
+            }
+        });
+        setupTableSearcherUpdate();
+    }
+
+    // CITE: <https://youtu.be/teSBvFy9NH8?t=1667>
+    private void setupTableSearcherUpdate() {
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchButtonDoClick();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchButtonDoClick();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchButtonDoClick();
+            }
+        });
+    }
+
+    private void searchButtonDoClick() {
+        trs.setRowFilter(new RowFilter() {
+            @Override
+            public boolean include(RowFilter.Entry entry) {
+                String query = searchTextField.getText();
+                Object menuItem = dropDownComboBox.getSelectedItem();
+                return (query.equals("")
+                            || query.equals("Search\u200B")
+                            || entry.getStringValue(2).contains(query))
+                        && (menuItem.equals("All")
+                            || (menuItem.equals("Inflows")
+                                && entry.getStringValue(3).startsWith("+"))
+                            || (menuItem.equals("Outflows")
+                                && entry.getStringValue(3).startsWith("–")));
+            }
         });
     }
 }

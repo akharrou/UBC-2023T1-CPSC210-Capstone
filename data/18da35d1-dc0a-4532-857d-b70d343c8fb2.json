@@ -17,43 +17,57 @@
         {
             "amount": 4,
             "created": "2023/03/18 22:49:38",
-            "description": "buys icecream",
+            "description": "buys ice-cream",
             "id": 3,
             "type": "outflow"
         },
         {
             "amount": 5.99,
             "created": "2023/03/18 22:49:46",
-            "description": "buys starbucks",
+            "description": "buys starbucks coffee",
             "id": 4,
             "type": "outflow"
         },
         {
-            "amount": 823,
+            "amount": 12.99,
             "created": "2023/03/18 23:06:57",
-            "description": "bla",
+            "description": "buys sandles",
             "id": 5,
-            "type": "inflow"
+            "type": "outflow"
         },
         {
-            "amount": 23,
+            "amount": 23.99,
             "created": "2023/03/18 23:07:03",
-            "description": "daio",
+            "description": "buys handbag",
             "id": 6,
             "type": "outflow"
         },
         {
-            "amount": 23,
+            "amount": 4500.99,
             "created": "2023/03/18 23:14:39",
-            "description": "daoi",
+            "description": "salary",
             "id": 7,
             "type": "inflow"
+        },
+        {
+            "amount": 29.99,
+            "created": "2023/03/18 23:21:42",
+            "description": "gift card",
+            "id": 8,
+            "type": "inflow"
+        },
+        {
+            "amount": 89.99,
+            "created": "2023/03/19 10:53:05",
+            "description": "buys perfume",
+            "id": 9,
+            "type": "outflow"
         }
     ],
     "targetNetCashflow": 1001,
-    "firstname": "Lily",
+    "firstname": "Jane",
     "created": "2023/03/18 22:47:44",
     "id": "18da35d1-dc0a-4532-857d-b70d343c8fb2",
-    "presentNetCashflow": 983.01,
+    "presentNetCashflow": 4564.0199999999995,
     "lastname": "Doe"
 }
