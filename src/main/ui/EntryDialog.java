@@ -1,10 +1,7 @@
 package ui;
 
-import model.FinancialAccount;
-
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -15,12 +12,14 @@ public class EntryDialog extends JDialog {
     private JButton cancelButton;
     private JTextField descTextField;
     private JTextField amtTextField;
-    private JPanel descPanel;
     private JPanel headerPanel;
-    private JPanel amtPanel;
     private JPanel bodyPanel;
     private JPanel footerPanel;
     private JPanel actionPanel;
+    private JPanel descSubPanel;
+    private JPanel descPanel;
+    private JPanel amtSubPanel;
+    private JPanel amtPanel;
 
     public EntryDialog() {
         okButton.addActionListener(event -> {

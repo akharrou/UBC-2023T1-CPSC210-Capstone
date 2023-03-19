@@ -67,10 +67,6 @@ public class LoginScreen extends JFrame {
         });
         loginButton.addActionListener(event -> {
             Main.login(this.accountIdTextField.getText());
-            int response = JOptionPane.showConfirmDialog(null, "Resume session?", "Title", JOptionPane.YES_NO_OPTION);
-            if (response == JOptionPane.NO_OPTION) {
-                Main.account.reset();
-            }
             this.setVisible(false);
             Main.accountScreen = new AccountScreen();
             this.dispose();

@@ -1,0 +1,59 @@
+{
+    "ledger": [
+        {
+            "amount": 90,
+            "created": "2023/03/18 22:49:29",
+            "description": "dad",
+            "id": 1,
+            "type": "inflow"
+        },
+        {
+            "amount": 80,
+            "created": "2023/03/18 22:49:32",
+            "description": "mom",
+            "id": 2,
+            "type": "inflow"
+        },
+        {
+            "amount": 4,
+            "created": "2023/03/18 22:49:38",
+            "description": "buys icecream",
+            "id": 3,
+            "type": "outflow"
+        },
+        {
+            "amount": 5.99,
+            "created": "2023/03/18 22:49:46",
+            "description": "buys starbucks",
+            "id": 4,
+            "type": "outflow"
+        },
+        {
+            "amount": 823,
+            "created": "2023/03/18 23:06:57",
+            "description": "bla",
+            "id": 5,
+            "type": "inflow"
+        },
+        {
+            "amount": 23,
+            "created": "2023/03/18 23:07:03",
+            "description": "daio",
+            "id": 6,
+            "type": "outflow"
+        },
+        {
+            "amount": 23,
+            "created": "2023/03/18 23:14:39",
+            "description": "daoi",
+            "id": 7,
+            "type": "inflow"
+        }
+    ],
+    "targetNetCashflow": 1001,
+    "firstname": "Lily",
+    "created": "2023/03/18 22:47:44",
+    "id": "18da35d1-dc0a-4532-857d-b70d343c8fb2",
+    "presentNetCashflow": 983.01,
+    "lastname": "Doe"
+}

@@ -1,6 +1,10 @@
 package ui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -49,6 +53,9 @@ public class AccountScreen extends JFrame {
     private JLabel tncLabel;
     private JLabel fsLabel;
     private JButton logoutButton;
+    private JPanel footerSubPanel;
+    private JButton editTncButton;
+    private JPanel editTncPanel;
 
     public AccountScreen() {
         super("Fintrac");
@@ -102,17 +109,35 @@ public class AccountScreen extends JFrame {
     }
 
     private void createUIComponents() {
-        setupTable();
+        createUITable();
         setupActions();
+        setupWindow();
+    }
+
+    private void setupWindow() {
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int response = JOptionPane.showConfirmDialog(null, "Save session?", "Title", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    Main.save();
+                }
+                dispose();
+            }
+        });
     }
 
     private void setupActions() {
         addEntryButton.addActionListener(event -> {
             new EntryDialog();
         });
+        editTncButton.addActionListener(e -> {
+            String newTncAmt = JOptionPane.showInputDialog("New Target Cashflow:");
+            Main.editGoal(Double.parseDouble(newTncAmt));
+            Main.accountScreen.updateScreen();
+        });
         resetTableButton.addActionListener(event -> {
             Main.account.getLedger().clear();
-            updateScreen();
+            Main.accountScreen.updateScreen();
         });
         logoutButton.addActionListener(event -> {
             int response = JOptionPane.showConfirmDialog(null, "Save session?", "Title", JOptionPane.YES_NO_OPTION);
@@ -126,7 +151,7 @@ public class AccountScreen extends JFrame {
         });
     }
 
-    private void setupTable() {
+    private void createUITable() {
 
         // CITE: <https://www.youtube.com/watch?v=3m1j3PiUeVI>
         ledgerTable.setModel(new DefaultTableModel(null, new String[] {"ID", "Created", "Description", "Amount"}));
