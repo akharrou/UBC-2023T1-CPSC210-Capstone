@@ -31,8 +31,9 @@ public class EntryDialog extends JDialog {
 
     // MODIFIES: this
     // EFFECTS: constructs and displays dialog form prompt. asks for financial entry information.
-    //         if "Ok" is pressed then a new financial entry is created from the input information,
-    //         and is added to the user's financial ledger. if "Cancel" is pressed, nothing happens.
+    //         IF: "Ok" is pressed then a new financial entry is created from the input information,
+    //         and is added to the user's financial ledger.
+    //         IF: "Cancel" is pressed, nothing happens.
     public EntryDialog() {
         this.setContentPane(contentPane);
         this.getRootPane().setDefaultButton(okButton);
@@ -48,8 +49,7 @@ public class EntryDialog extends JDialog {
         okButton.addActionListener(event -> {
             try {
                 GuiApp.account.recordFinancialEntry(
-                        Double.parseDouble(this.amtTextField.getText()), this.descTextField.getText()
-                );
+                        Double.parseDouble(this.amtTextField.getText()), this.descTextField.getText());
                 GuiApp.accountScreen.updateScreen();
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(rootPane, "Invalid number format.", "Error", JOptionPane.ERROR_MESSAGE);

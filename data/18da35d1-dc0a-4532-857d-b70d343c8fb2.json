@@ -62,12 +62,75 @@
             "description": "buys perfume",
             "id": 9,
             "type": "outflow"
+        },
+        {
+            "amount": 183.78,
+            "created": "2023/03/19 12:01:28",
+            "description": "buys groceries",
+            "id": 10,
+            "type": "outflow"
+        },
+        {
+            "amount": 3400,
+            "created": "2023/03/19 12:01:54",
+            "description": "buys car",
+            "id": 11,
+            "type": "outflow"
+        },
+        {
+            "amount": 860,
+            "created": "2023/03/19 12:02:11",
+            "description": "pays rent",
+            "id": 12,
+            "type": "outflow"
+        },
+        {
+            "amount": 100,
+            "created": "2023/03/19 12:02:25",
+            "description": "buys plane ticket",
+            "id": 13,
+            "type": "outflow"
+        },
+        {
+            "amount": 1499.99,
+            "created": "2023/03/19 12:02:50",
+            "description": "wins local lotto",
+            "id": 14,
+            "type": "inflow"
+        },
+        {
+            "amount": 300,
+            "created": "2023/03/19 12:03:06",
+            "description": "buys furniture",
+            "id": 15,
+            "type": "outflow"
+        },
+        {
+            "amount": 100,
+            "created": "2023/03/19 12:03:21",
+            "description": "finds 100 bucks on the ground",
+            "id": 16,
+            "type": "inflow"
+        },
+        {
+            "amount": 4000,
+            "created": "2023/03/19 12:03:38",
+            "description": "pays tuition",
+            "id": 17,
+            "type": "outflow"
+        },
+        {
+            "amount": 4500,
+            "created": "2023/03/19 12:04:01",
+            "description": "gets next month's salary early",
+            "id": 18,
+            "type": "inflow"
         }
     ],
     "targetNetCashflow": 1001,
     "firstname": "Jane",
     "created": "2023/03/18 22:47:44",
     "id": "18da35d1-dc0a-4532-857d-b70d343c8fb2",
-    "presentNetCashflow": 4564.0199999999995,
+    "presentNetCashflow": 1820.2299999999996,
     "lastname": "Doe"
 }

@@ -12,9 +12,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import static java.lang.Thread.sleep;
 import static ui.GuiApp.*;
 
+// Represents the GUI application's account screen.
 public class AccountScreen extends JFrame {
 
     private JButton addEntryButton;
@@ -49,6 +49,7 @@ public class AccountScreen extends JFrame {
     private JPanel dropDownPanel;
     private JPanel addEntryButtonPanel;
 
+    // EFFECTS: constructs and displays the application's account screen.
     public AccountScreen() {
         super("Fintrac");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,17 +64,23 @@ public class AccountScreen extends JFrame {
         this.getContentPane().requestFocus();  // CITE: <https://stackoverflow.com/a/58008050>
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates the state of this screen to reflect that of the logged-in account.
     public void updateScreen() {
         this.updateHeader();
         this.updateBody();
         this.updateFooter();
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates the state of this screen's header section to reflect that of the logged-in account.
     private void updateHeader() {
         this.accountNameLabel.setText(GuiApp.account.getFirstname() + " " + GuiApp.account.getLastname());
         this.accountIdLabel.setText(GuiApp.account.getID().toString().substring(0,7));
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates the state of this screen's body section to reflect that of the logged-in account.
     private void updateBody() {
         // CITE: <https://www.youtube.com/watch?v=teSBvFy9NH8>
         DefaultTableModel model = (DefaultTableModel) ledgerTable.getModel();
@@ -81,9 +88,11 @@ public class AccountScreen extends JFrame {
         GuiApp.account.getLedger().stream().forEach(elem -> {
             model.addRow(new Object[] {elem.getID(), elem.getCreated(), elem.getDescription(), elem.getAmountRepr()});
         });
-        searchButtonDoClick();
+        applyTableFilter();
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates the state of this screen's footer section to reflect that of the logged-in account.
     private void updateFooter() {
         String pnc = String.format("Present Net Cashflow: %s $%,.2f",
                 GuiApp.account.getPresentNetCashflow() >= 0 ? "" : "–",
@@ -101,12 +110,16 @@ public class AccountScreen extends JFrame {
         this.fsLabel.setText(fs);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void createUIComponents() {
         setupTable();
         setupActions();
         setupWindow();
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void setupWindow() {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -119,6 +132,8 @@ public class AccountScreen extends JFrame {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void setupActions() {
         addEntryButton.addActionListener(e -> new EntryDialog());
         editTncButton.addActionListener(e -> {
@@ -143,13 +158,11 @@ public class AccountScreen extends JFrame {
             GuiApp.loginScreen = new LoginScreen();
             this.dispose();
         });
-        dropDownComboBox.addItemListener(e -> searchButtonDoClick());  // CITE: https://youtu.be/teSBvFy9NH8?t=1511
+        dropDownComboBox.addItemListener(e -> applyTableFilter());  // CITE: https://youtu.be/teSBvFy9NH8?t=1511
     }
 
-    private void setupButtons() {
-
-    }
-
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void setupTable() {
         // CITE: <https://www.youtube.com/watch?v=3m1j3PiUeVI>
         ledgerTable.setModel(new DefaultTableModel(null, new String[] {"ID", "Created", "Description", "Amount"}));
@@ -160,6 +173,8 @@ public class AccountScreen extends JFrame {
         this.setupTableSearcher();
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void setupTableRenderer() {
         DefaultTableCellRenderer cellLeftRenderer = new DefaultTableCellRenderer();
         DefaultTableCellRenderer cellCenterRenderer = new DefaultTableCellRenderer();
@@ -185,6 +200,8 @@ public class AccountScreen extends JFrame {
         ledgerTable.getColumnModel().getColumn(3).setCellRenderer(cellRightRenderer);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     // CITE: <https://stackoverflow.com/q/39864139>
     private void setupTableSorter() {
         trs = new TableRowSorter(ledgerTable.getModel());
@@ -201,6 +218,8 @@ public class AccountScreen extends JFrame {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     // CITE: <https://stackoverflow.com/a/40516250>
     private void setupTableSearcher() {
         searchTextField.setText("Search\u200B");
@@ -225,27 +244,32 @@ public class AccountScreen extends JFrame {
         setupTableSearcherUpdate();
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     // CITE: <https://youtu.be/teSBvFy9NH8?t=1667>
     private void setupTableSearcherUpdate() {
         searchTextField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                searchButtonDoClick();
+                applyTableFilter();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                searchButtonDoClick();
+                applyTableFilter();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                searchButtonDoClick();
+                applyTableFilter();
             }
         });
     }
 
-    private void searchButtonDoClick() {
+    // MODIFIES: this
+    // EFFECTS: searches for and updates table with entries with fields matching user search query
+    //          and drop down menu item filter selected.
+    private void applyTableFilter() {
         trs.setRowFilter(new RowFilter() {
             @Override
             public boolean include(RowFilter.Entry entry) {

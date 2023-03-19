@@ -32,7 +32,7 @@ public class FinancialLedger {
                 .collect(Collectors.toList());
     }
 
-    // EFFECTS: returns ledger.
+    // EFFECTS: returns entire ledger.
     public List<FinancialEntry> getLedger() {
         return this.ledger;
     }

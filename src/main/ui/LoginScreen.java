@@ -7,6 +7,7 @@ import java.awt.*;
 
 import static ui.GuiApp.*;
 
+// Represents the GUI application's login/registration screen.
 public class LoginScreen extends JFrame {
 
     private JPanel rootPanel;
@@ -36,6 +37,7 @@ public class LoginScreen extends JFrame {
     private JTextField tncTextField;
     private JPanel footerSubPanel;
 
+    // EFFECTS: constructs and displays the application's login/registration screen.
     public LoginScreen() {
         super("Fintrac");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +51,8 @@ public class LoginScreen extends JFrame {
         this.setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and/or configures screen components.
     private void createUIComponents() {
         registerButton.addActionListener(event -> {
             try {
@@ -61,7 +65,7 @@ public class LoginScreen extends JFrame {
                 GuiApp.accountScreen = new AccountScreen();
                 dispose();
             } catch (InvalidInputException e) {
-                // pass; already handled
+                // pass; handled internally
             }
         });
         loginButton.addActionListener(event -> {
@@ -71,7 +75,7 @@ public class LoginScreen extends JFrame {
                 GuiApp.accountScreen = new AccountScreen();
                 this.dispose();
             } catch (InvalidInputException e) {
-                // pass; already handled
+                // pass; handled internally
             }
         });
     }

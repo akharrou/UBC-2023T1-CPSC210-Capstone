@@ -4,6 +4,7 @@ import java.io.IOException;
 
 // TUI or GUI application launcher class.
 public class Main {
+
     // EFFECTS: launches the main application.
     public static void main(String[] args) throws IOException {
         if (args != null && args.length > 0) {
@@ -14,4 +15,5 @@ public class Main {
         }
         new GuiApp();
     }
+
 }

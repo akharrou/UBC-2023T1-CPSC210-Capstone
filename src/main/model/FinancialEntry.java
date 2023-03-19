@@ -34,7 +34,7 @@ public abstract class FinancialEntry implements Writable {
     }
 
     // EFFECTS: returns [inflow|outflow] entry's string amount representation in dollars,
-    //          with preceding negative sign if outflow and preceding positive sign if inflow.
+    //          prefixed with a negative sign if outflow or with positive sign if inflow.
     public abstract String getAmountRepr();
 
     // REQUIRES: non-negative ntabs

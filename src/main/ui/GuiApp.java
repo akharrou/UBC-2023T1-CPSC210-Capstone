@@ -28,12 +28,15 @@ public class GuiApp {
 
     protected static FinancialAccount account;
 
+    // EFFECTS: constructs an instance of the GUI form of the application.
     public GuiApp() {
         GuiApp.launchScreen = new LaunchScreen();
     }
 
     // MODIFIES: this
-    // EFFECTS: logs in and loads user's previously saved financial account data.
+    // EFFECTS: performs login, loading in the user's previously saved financial account data.
+    //          IF: accountID is invalid, or its corresponding data file on disk isn't found
+    //              will throw an 'InvalidInputException'.
     protected static void login(String accountID)
             throws InvalidInputException {
         if (accountID.length() < 3) {
@@ -62,7 +65,8 @@ public class GuiApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: creates a new financial account based on given information
+    // EFFECTS: creates a new financial account based on given information and logs into it.
+    //          IF: firstname, lastname or netTargetCashflow is invalid will throw an 'InvalidInputException'.
     protected static void register(String firstname, String lastname, String netTargetCashflow)
             throws InvalidInputException {
         if (firstname.isEmpty() || lastname.isEmpty() || netTargetCashflow.isEmpty()) {
@@ -75,7 +79,7 @@ public class GuiApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads previously saved financial account from disk file
+    // EFFECTS: loads previously saved financial account from disk file.
     protected static void load(String accountFilepath) {
         try {
             GuiApp.account = new FinancialAccount(new JSONObject(Reader.read(accountFilepath)));
@@ -95,8 +99,8 @@ public class GuiApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: modifies the target cashflow goal of the curently logged-in financial
-    //          account to that specified by user input.
+    // EFFECTS: edits the target cashflow goal of the curently logged-in financial to the new input target.
+    //          IF: netTargetCashflow is invalid (empty or non-numeric) will throw an 'InvalidInputException'.
     protected static void editGoal(String newTargetNetCashflow)
             throws InvalidInputException {
         if (newTargetNetCashflow.isEmpty()) {
@@ -108,6 +112,7 @@ public class GuiApp {
             GuiApp.account.setTargetNetCashflow(Double.parseDouble(newTargetNetCashflow));
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Edit failed.", "Error", JOptionPane.ERROR_MESSAGE);
+            throw new InvalidInputException();
         }
     }
 }
