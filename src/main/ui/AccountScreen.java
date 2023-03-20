@@ -96,11 +96,11 @@ public class AccountScreen extends JFrame {
     private void updateFooter() {
         String pnc = String.format("Present Net Cashflow: %s $%,.2f",
                 GuiApp.account.getPresentNetCashflow() >= 0 ? "" : "–",
-                GuiApp.account.getPresentNetCashflow()
+                Math.abs(GuiApp.account.getPresentNetCashflow())
         );
         String tnc = String.format("Target Net Cashflow: %s $%,.2f",
                 GuiApp.account.getTargetNetCashflow() >= 0 ? "" : "–",
-                GuiApp.account.getTargetNetCashflow()
+                Math.abs(GuiApp.account.getTargetNetCashflow())
         );
         String fs = String.format("Financial Standing: %s",
                 GuiApp.account.getPresentNetCashflow() > GuiApp.account.getTargetNetCashflow() ? "Good" : "Bad"
