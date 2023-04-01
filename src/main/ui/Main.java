@@ -1,5 +1,8 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
+
 import java.io.IOException;
 
 // TUI or GUI application launcher class.
@@ -15,5 +18,4 @@ public class Main {
         }
         new GuiApp();
     }
-
 }

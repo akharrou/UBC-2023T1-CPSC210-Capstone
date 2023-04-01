@@ -1,9 +1,13 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.InvalidInputException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static ui.GuiApp.*;
 
@@ -49,6 +53,13 @@ public class LoginScreen extends JFrame {
         this.createUIComponents();
         this.pack();
         this.setVisible(true);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                for (Event event : EventLog.getInstance()) {
+                    System.out.println("[" + event.getDate() + "] " + event.getDescription());
+                }
+            }
+        });
     }
 
     // MODIFIES: this

@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.InvalidInputException;
 
 import java.awt.*;
@@ -128,6 +130,9 @@ public class AccountScreen extends JFrame {
                     GuiApp.save();
                 }
                 dispose();
+                for (Event event : EventLog.getInstance()) {
+                    System.out.println("[" + event.getDate() + "] " + event.getDescription());
+                }
             }
         });
     }

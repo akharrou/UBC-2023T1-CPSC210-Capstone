@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import model.Event;
+import model.EventLog;
 import model.InvalidInputException;
 import org.json.JSONObject;
 

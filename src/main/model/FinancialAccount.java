@@ -30,6 +30,9 @@ public class FinancialAccount implements Writable {
         this.presentNetCashflow = 0.0;
         this.targetNetCashflow = 0.0;
         this.ledger = new FinancialLedger();
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialAccount] new fresh financial account constructed"
+        ));
     }
 
     // EFFECTS: constructs the financial account represented by the given JSON object.
@@ -41,6 +44,9 @@ public class FinancialAccount implements Writable {
         this.presentNetCashflow = account.getDouble("presentNetCashflow");
         this.targetNetCashflow = account.getDouble("targetNetCashflow");
         this.ledger = new FinancialLedger(account.getJSONArray("ledger"));
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialAccount] new financial account constructed (from JSON object)"
+        ));
     }
 
     // MODIFIES: this
@@ -49,6 +55,9 @@ public class FinancialAccount implements Writable {
     public void recordFinancialEntry(Double amount, String description) {
         this.ledger.addEntry(amount, description);
         this.presentNetCashflow = this.ledger.getNetCashflow();
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialAccount.recordFinancialEntry] new financial entry registered"
+        ));
     }
 
     // EFFECTS: returns account's financial ledger.
@@ -90,6 +99,10 @@ public class FinancialAccount implements Writable {
     // EFFECTS: sets account's target net cashflow.
     public void setTargetNetCashflow(Double targetNetCashflow) {
         this.targetNetCashflow = targetNetCashflow;
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialAccount.setTargetNetCashflow] net target cashflow set to: '"
+                        + this.targetNetCashflow
+        ));
     }
 
     // MODIFIES: this
@@ -97,6 +110,9 @@ public class FinancialAccount implements Writable {
     public void reset() {
         this.ledger.drop();
         this.presentNetCashflow = 0.0;
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialAccount.reset] account was reset"
+        ));
     }
 
     // EFFECTS: returns the console string representation of the summary report of this financial account.
@@ -131,7 +147,7 @@ public class FinancialAccount implements Writable {
         return repr.toString();
     }
 
-    // EFFECTS: returns the [writable] JSON object representation of this financial account.
+    // EFFECTS: returns the [esenwritable] JSON object reprtation of this financial account.
     public JSONObject jsonRepr() {
         return (new JSONObject())
             .put("id", this.id)

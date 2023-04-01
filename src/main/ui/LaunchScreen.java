@@ -1,16 +1,18 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
+
 import static ui.GuiApp.MIN_FRAME_HEIGHT;
 import static ui.GuiApp.MIN_FRAME_WIDTH;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
 // Represents the GUI application's launch screen.
 public class LaunchScreen extends JFrame {

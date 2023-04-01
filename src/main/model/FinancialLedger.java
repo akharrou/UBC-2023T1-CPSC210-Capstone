@@ -16,6 +16,9 @@ public class FinancialLedger {
     // EFFECTS: constructs an empty financial ledger.
     public FinancialLedger() {
         this.ledger = new ArrayList<FinancialEntry>();
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialLedger] new empty financial ledger constructed"
+        ));
     }
 
     // EFFECTS: constructs the financial ledger represented by the given JSON array.
@@ -30,6 +33,9 @@ public class FinancialLedger {
                     return e.getString("type").equals("inflow")
                         ? new Inflow(e) : new Outflow(e); })
                 .collect(Collectors.toList());
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialLedger] new financial ledger constructed (from JSON object)"
+        ));
     }
 
     // EFFECTS: returns entire ledger.
@@ -47,12 +53,18 @@ public class FinancialLedger {
         } else { // if (amount < 0)
             this.ledger.add(new Outflow(this.ledger.size() + 1, amount, description));
         }
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialLedger.addEntry] added new financial entry to ledger"
+        ));
     }
 
     // MODIFIES: this
     // EFFECTS: removes all entries from this ledger list.
     public void drop() {
         this.ledger.clear();
+        EventLog.getInstance().logEvent(new Event(
+                "[FinancialLedger.drop] cleared entire financial ledger"
+        ));
     }
 
     // EFFECTS: returns the number of entries in this ledger list.
