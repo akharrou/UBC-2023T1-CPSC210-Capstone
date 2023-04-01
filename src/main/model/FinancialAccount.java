@@ -101,7 +101,7 @@ public class FinancialAccount implements Writable {
         this.targetNetCashflow = targetNetCashflow;
         EventLog.getInstance().logEvent(new Event(
                 "[FinancialAccount.setTargetNetCashflow] net target cashflow set to: '"
-                        + this.targetNetCashflow
+                        + this.targetNetCashflow + "'"
         ));
     }
 

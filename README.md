@@ -15,7 +15,7 @@
 
     *Because on a tight budget, must make sure I don't go broke and starve.*
 
-## User Stories
+## Phase 01-02: User Stories
 
 - Phase 01
     - [x] As a user, I want to be able to set a financial goal.
@@ -30,7 +30,7 @@
     - [x] As a user, when I start the application, I want the option to [login and] load my [previously saved] financial account and ledger data information from file.
     - [x] As a user, I want be able to create more than one account, for all of my friends and family [and similarly have all the above features]
 
-## Instructions for Grader
+## Phase 03: GUI Instructions for Grader
 
 - You can generate the first required action (adding Xs to Ys) by:
     1. launching the application
@@ -45,6 +45,37 @@
 - You can locate my visual component by starting the app; it's on the launch screen.
 - You can save the state of my application by [from the account screen] clicking "logout" or closing the window, and then clicking "yes" to the save popup.
 - You can reload the state of my application by [from the login/register screen] loggining in
+
+## Phase 4: Event logging (Task 2)
+
+Representative sample of logged events:
+
+```plaintext
+. . .
+[Sat Apr 01 07:20:09 PDT 2023] [FinancialLedger] new empty financial ledger constructed
+[Sat Apr 01 07:20:09 PDT 2023] [FinancialAccount] new fresh financial account constructed
+[Sat Apr 01 07:20:09 PDT 2023] [FinancialAccount.setTargetNetCashflow] net target cashflow set to: '89.0'
+[Sat Apr 01 07:20:14 PDT 2023] [FinancialEntry] new inflow financial entry constructed
+[Sat Apr 01 07:20:14 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:14 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+[Sat Apr 01 07:20:17 PDT 2023] [FinancialEntry] new inflow financial entry constructed
+[Sat Apr 01 07:20:17 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:17 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+[Sat Apr 01 07:20:21 PDT 2023] [FinancialEntry] new outflow financial entry constructed
+[Sat Apr 01 07:20:21 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:21 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+[Sat Apr 01 07:20:24 PDT 2023] [FinancialEntry] new outflow financial entry constructed
+[Sat Apr 01 07:20:24 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:24 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+[Sat Apr 01 07:20:29 PDT 2023] [FinancialAccount.setTargetNetCashflow] net target cashflow set to: '100.0'
+[Sat Apr 01 07:20:32 PDT 2023] [FinancialEntry] new inflow financial entry constructed
+[Sat Apr 01 07:20:32 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:32 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+[Sat Apr 01 07:20:35 PDT 2023] [FinancialEntry] new outflow financial entry constructed
+[Sat Apr 01 07:20:35 PDT 2023] [FinancialLedger.addEntry] added new financial entry to ledger
+[Sat Apr 01 07:20:35 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
+. . .
+```
 
 <!--
 ## Domain Analysis
