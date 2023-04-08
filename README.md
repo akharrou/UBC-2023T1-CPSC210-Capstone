@@ -46,7 +46,7 @@
 - You can save the state of my application by [from the account screen] clicking "logout" or closing the window, and then clicking "yes" to the save popup.
 - You can reload the state of my application by [from the login/register screen] loggining in
 
-## Phase 4: Event logging (Task 2)
+## Phase 04: Event logging (Task 2)
 
 Representative sample of logged events:
 
@@ -76,6 +76,10 @@ Representative sample of logged events:
 [Sat Apr 01 07:20:35 PDT 2023] [FinancialAccount.recordFinancialEntry] new financial entry registered
 . . .
 ```
+
+## Phase 04: UML Diagram (Task 3)
+
+![UML_Design_Diagram](./UML_Design_Diagram.jpeg)
 
 ## Phase 04: Reflection (Task 3)
 
