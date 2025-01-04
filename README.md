@@ -1,4 +1,4 @@
-# UBC 2022 T2 CPSC 210 - Personal Project
+# UBC 2023 (2022 T2) CPSC 210 - Personal Project
 
 Basic financial tracking app.
 
