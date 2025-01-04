@@ -1,5 +1,43 @@
 # UBC 2022 T2 CPSC 210 - Personal Project
 
+Basic financial tracking app.
+
+> Application that tracks financial inflows and outflows, i.e receipts and payments. You state a desired target net cashflow, then input any payments or receipts, then you can view, filter, sort, search through them in a table, and lastly you’re informed about your financial standing, good if your current net cashflow > target net cashflow, bad otherwise.
+
+<center style="display:grid;place-items:center;grid-template-areas:'a b';grid-template-columns:45% 45%;grid-column-gap:1em;margin:1em">
+    <div>
+        <h3>Register</h3>
+        <img src="assets/register.mp4.gif" alt="register" style="float:none;width:100%"></h3>
+    </div>
+    <div>
+        <h3>Login</h3>
+        <img src="assets/login.mov.gif" alt="login" style="float:none;width:100%">
+    </div>
+</center>
+
+<center style="display:grid;place-items:center;grid-template-areas:'a b';grid-template-columns:45% 45%;grid-column-gap:1em;margin:1em">
+    <div>
+        <h3>Filter & Sort</h3>
+        <img src="assets/filter-and-sort.mov.gif" alt="filter-and-sort" style="float:none;width:100%">
+    </div>
+    <div>
+        <h3>Search</h3>
+        <img src="assets/search.mp4.gif" alt="search" style="float:none;width:100%">
+    </div>
+</center>
+
+<center style="display:grid;place-items:center;grid-template-areas:'a b';grid-template-columns:45% 45%;grid-column-gap:1em;margin:1em">
+    <div>
+        <h3>Add Entries</h3>
+        <img src="assets/add.mov.gif" alt="add-entries" style="float:none;width:100%">
+    </div>
+    <div>
+        <h3>Clear, Logout</h3>
+        <img src="assets/clear-and-logout.mov.gif" alt="clear-and-logout" style="float:none;width:100%">
+    </div>
+</center>
+
+
 ## About
 
 1. **What will the application do?**
